@@ -8,6 +8,7 @@ import 'package:residente/main.dart';
 import 'package:residente/models/residente.dart';
 import 'package:residente/screens/register1.dart';
 import 'package:residente/utils/internetConnection.dart';
+import 'package:residente/utils/methos.dart';
 
 
 
@@ -157,33 +158,19 @@ bool hasConnection = false;
       
     } else {
       pr.hide();
-      _mostrarMensaje("No tienes conexión a internet.",context);
+      _showMessage("No tienes conexión a internet.",context);
       //print("no conexion");
     }
   }
 
 
 
-  _mostrarMensaje(String _mensaje, context) {
+  _showMessage(String _mensaje, context) {
     setState(() {
       global.mensaje = _mensaje;
       mostrarMensaje = true;
     });
-
-    return Flushbar(
-      flushbarPosition: FlushbarPosition.TOP,
-      flushbarStyle: FlushbarStyle.GROUNDED,
-      title: "Alerta!",
-      messageText: Text(
-        _mensaje,
-        style: TextStyle(
-            fontSize: 18.0,
-            color: MyColors.moccasin,
-            fontFamily: "ShadowsIntoLightTwo"),
-      ),
-      backgroundColor: MyColors.sapphire,
-      duration: Duration(seconds: 3),
-    )..show(context);
+return Methods.getMessage(_mensaje, context);
   }
 
 

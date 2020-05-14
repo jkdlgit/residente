@@ -49,7 +49,7 @@ class _Register1State extends State<Register1> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                 SizedBox(
+                SizedBox(
                   height: 10.0,
                 ),
                 Row(
@@ -217,7 +217,7 @@ class _Register1State extends State<Register1> {
   }
 
   _verificarRegistro(context) async {
-    pr =Methods.getPopUp(context);
+    pr = Methods.getPopUp(context);
     /*pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);*/
     await pr.show();
@@ -252,18 +252,18 @@ class _Register1State extends State<Register1> {
               _continuar(context);
             } else {
               pr.hide();
-              _mostrarMensaje(
+              _showMessage(
                   'Error generando registro, por favor vuela a intentarlo.',
                   context);
             }
           } else {
             pr.hide();
-            _mostrarMensaje('El código no existe.', context);
+            _showMessage('El código no existe.', context);
           }
         });
       } else {
         pr.hide();
-        _mostrarMensaje('El campo esta vacio.', context);
+        _showMessage('El campo esta vacio.', context);
       }
     } catch (e) {
       pr.hide();
@@ -279,26 +279,12 @@ class _Register1State extends State<Register1> {
         .updateData({field: value});
   }
 
-  _mostrarMensaje(String _mensaje, context) {
+  _showMessage(String _mensaje, context) {
     setState(() {
       global.mensaje = _mensaje;
       mostrarMensaje = true;
     });
-
-    return Flushbar(
-      flushbarPosition: FlushbarPosition.TOP,
-      flushbarStyle: FlushbarStyle.GROUNDED,
-      title: "Alerta!",
-      messageText: Text(
-        _mensaje,
-        style: TextStyle(
-            fontSize: 18.0,
-            color: MyColors.moccasin,
-            fontFamily: "ShadowsIntoLightTwo"),
-      ),
-      backgroundColor: MyColors.sapphire,
-      duration: Duration(seconds: 3),
-    )..show(context);
+    return Methods.getMessage(_mensaje, context);
   }
 
   _error() {
