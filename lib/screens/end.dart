@@ -141,10 +141,10 @@ class _EndState extends State<End> {
                       (_timer != null) ? _timer.cancel() : SizedBox.shrink();
                       createData();
                       if (datosEnvioCorrectos) {
-                        _mostrarPopUp(true);
+                        _mostrarPopUp(context,true);
                         alertaEnviada = true;
                       } else {
-                        _mostrarPopUp(false);
+                        _mostrarPopUp(context,false);
                         alertaEnviada = false;
                       }
                     } else {
@@ -229,7 +229,7 @@ class _EndState extends State<End> {
     }
   }
 
-  _mostrarPopUp(estadoEnvio) {
+  _mostrarPopUp(context,estadoEnvio) {
     print(estadoEnvio);
     var alertStyle = AlertStyle(
       animationType: AnimationType.fromTop,

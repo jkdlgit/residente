@@ -10,45 +10,6 @@ import 'package:residente/screens/register1.dart';
 import 'package:residente/utils/internetConnection.dart';
 import 'package:residente/utils/methos.dart';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
 class NoConnection extends StatefulWidget {
   @override
   _NoConnectionState createState() => _NoConnectionState();
@@ -142,8 +103,7 @@ bool hasConnection = false;
   }
 
   _testConnection(context) async {
-    pr = new ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
+    pr = Methods.getPopUp(context);
     await pr.show();
 
     hasConnection = await DataConnectionChecker().hasConnection;
@@ -153,7 +113,7 @@ bool hasConnection = false;
       print("conexion");
       Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MyApp()),
+      MaterialPageRoute(builder: (context) => HomeTemp()),
     );
       
     } else {
