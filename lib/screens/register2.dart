@@ -30,11 +30,11 @@ class _Register1State extends State<Register2> {
         return new Future(() => false);
       },
       child: Scaffold(
-        appBar: AppBar(
+        /*appBar: AppBar(
           elevation: 0.0,
           backgroundColor: MyColors.white_grey,
-        ),
-        body: body(),
+        ),*/
+        body: SafeArea(child: body()),
         backgroundColor: MyColors.white_grey,
       ),
     );

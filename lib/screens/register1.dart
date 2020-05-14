@@ -30,11 +30,11 @@ class _Register1State extends State<Register1> {
       },
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
-        appBar: AppBar(
+        /*appBar: AppBar(
           elevation: 0.0,
           backgroundColor: MyColors.white_grey,
-        ),
-        body: body(context),
+        ),*/
+        body: SafeArea(child: body(context)),
         backgroundColor: MyColors.white_grey,
       ),
     );
