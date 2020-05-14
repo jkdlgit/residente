@@ -6,6 +6,7 @@ import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/utils/localStorageDB.dart';
+import 'package:residente/utils/methos.dart';
 
 class Register2 extends StatefulWidget {
   @override
@@ -247,15 +248,24 @@ class _Register1State extends State<Register2> {
     );
   }
 
+  bool _inputsCorrect() {
+    String name = myControllerNombre.text.trim();
+    String lasName = myControllerFamilia.text.trim();
+    String addres = myControllerDireccion.text.trim();
+    if (name.length > 0 && lasName.length > 0 && addres.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   _verificarRegistro(context) async {
     pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
     await pr.show();
-
+    
     try {
-      if (myControllerNombre.text.length > 0 &&
-          myControllerFamilia.text.length > 0 &&
-          myControllerDireccion.text.length > 0) {
+      if (_inputsCorrect()) {
         if (global.residente != null) {
           global.residente.nombre = myControllerNombre.text;
           global.residente.familia = myControllerFamilia.text;
@@ -275,15 +285,15 @@ class _Register1State extends State<Register2> {
             _continuar(context);
           } else {
             pr.hide();
-            _mostrarMensaje('Error generando registro', context);
+            _showMessage('Error generando registro', context);
           }
         } else {
           pr.hide();
-          _mostrarMensaje('Error generando registro', context);
+          _showMessage('Error generando registro', context);
         }
       } else {
         pr.hide();
-        _mostrarMensaje('Uno de los campos esta vacio.', context);
+        _showMessage('Uno de los campos esta vacio.', context);
       }
     } catch (e) {
       pr.hide();
@@ -297,28 +307,14 @@ class _Register1State extends State<Register2> {
     });
   }
 
-  _mostrarMensaje(String _mensaje, context) {
+  _showMessage(String _mensaje, context) {
     setState(
       () {
         global.mensaje = _mensaje;
         mostrarMensaje = true;
       },
     );
-
-    return Flushbar(
-      flushbarPosition: FlushbarPosition.TOP,
-      flushbarStyle: FlushbarStyle.GROUNDED,
-      title: "Alerta!",
-      messageText: Text(
-        _mensaje,
-        style: TextStyle(
-            fontSize: 18.0,
-            color: MyColors.moccasin,
-            fontFamily: "ShadowsIntoLightTwo"),
-      ),
-      backgroundColor: MyColors.sapphire,
-      duration: Duration(seconds: 3),
-    )..show(context);
+    return Methods.getMessage(_mensaje, context);
   }
 
   Future<bool> createData(String collection) async {
