@@ -104,7 +104,7 @@ class _Register1State extends State<Register1> {
                   height: 10.0,
                 ),
                 Text(
-                  global.app_name,
+                  global.appName,
                   style: TextStyle(
                     color: MyColors.sapphire,
                     fontSize: TamanioTexto.logo,

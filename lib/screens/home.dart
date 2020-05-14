@@ -12,6 +12,7 @@ import 'package:residente/models/times.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/screens/end.dart';
 import 'package:residente/screens/noConnection.dart';
+import 'package:residente/utils/methos.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'package:data_connection_checker/data_connection_checker.dart';
@@ -27,9 +28,7 @@ class Home extends StatefulWidget {
 
 final db = Firestore.instance;
 bool mostrarMensaje = false;
-  ProgressDialog pr;
-
-
+ProgressDialog pr;
 
 class HomeState extends State<Home> {
   //
@@ -39,10 +38,12 @@ class HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     _testConnection(context);
     //_testConnection().timeout(const Duration(seconds: 10));
     global.usAlerta.codigo = null;
     _obtenerCodigoAlerta();
+    //_cancelAlert();
   }
 
   _testConnection(context) async {
@@ -55,6 +56,8 @@ class HomeState extends State<Home> {
       );
     }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +176,8 @@ class HomeState extends State<Home> {
       child: Flex(
         direction: Axis.vertical,
         children: <Widget>[
+
+
           Expanded(
             //flex: 11,
             child: _cardSuperior(),
@@ -353,7 +358,6 @@ class HomeState extends State<Home> {
     ).show();
   }
 
-  
   _mostrarMensaje(String _mensaje, context) {
     setState(() {
       global.mensaje = _mensaje;
@@ -377,49 +381,50 @@ class HomeState extends State<Home> {
   }
 
 //            startTimer();
-int contWaitCode=0;
-Timer _timer;
-void startTimer() async{
-   pr = new ProgressDialog(context,
+  int contWaitCode = 0;
+  Timer _timer;
+  void startTimer() async {
+    pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
     await pr.show();
 
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) => setState(
+        () {
+          if (global.usAlerta.codigo != null) {
+            contWaitCode = 0;
+            timer.cancel();
+            pr.hide();
 
-  const oneSec = const Duration(seconds: 1);
-  _timer = new Timer.periodic(
-    oneSec,
-    (Timer timer) => setState(
-      () {
-        if(global.usAlerta.codigo!= null)
-        {
-          contWaitCode=0;
-          timer.cancel();
-                        pr.hide();
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => End()),
+            );
+            //corrcto, lanzar siguiente ventana
+          }
 
-Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => End()),
-      );
-          //corrcto, lanzar siguiente ventana
-        }
+          if (contWaitCode > 10) {
+            contWaitCode = 0;
+            timer.cancel();
+            pr.hide();
+            _mostrarMensaje("No se pudo obtener codigo", context);
+            //mostrar mensaje de error, no se pudo obtener el codigo y
+            //volver a intentarlo,
+            //lanzando nuevamente esta ventana
+            //pero como pop up con dos opcines
+            //reintentar o salir
+          } else {
+            contWaitCode = contWaitCode + 1;
+          }
+        },
+      ),
+    );
+  }
 
-        if (contWaitCode >10) {
-          contWaitCode=0;
-          timer.cancel();
-                        pr.hide();
-  _mostrarMensaje("No se pudo obtener codigo", context);
-          //mostrar mensaje de error, no se pudo obtener el codigo y 
-          //volver a intentarlo, 
-          //lanzando nuevamente esta ventana
-          //pero como pop up con dos opcines
-          //reintentar o salir
-        } else {
-          contWaitCode = contWaitCode + 1;
-        }
-      },
-    ),
-  );
-}
+  
+
   // _testConnection() async{
 /*
     try {

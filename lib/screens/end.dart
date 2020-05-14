@@ -6,6 +6,7 @@ import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
 import 'dart:async';
 import 'package:residente/screens/home.dart';
+import 'package:residente/utils/methos.dart';
 
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -177,6 +178,9 @@ class _EndState extends State<End> {
       (Timer timer) => setState(
         () {
           if (_start < 1) {
+ 
+     // _showMessage('Alerta fue cancelada automaticamente', context);
+
             timer.cancel();
             Navigator.pop(context);
             print('FINLIZADO');
@@ -257,7 +261,7 @@ class _EndState extends State<End> {
     return Alert(
       style: alertStyle,
       context: context,
-      type: AlertType.warning,
+      type: AlertType.success,
       title:(estadoEnvio)? "ALERTA ENVIADA":"ALERTNA NO ENVIADA",
       buttons: [
         DialogButton(
@@ -284,4 +288,6 @@ class _EndState extends State<End> {
       ],
     ).show();
   }
+
+  
 }
