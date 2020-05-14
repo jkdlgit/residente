@@ -48,6 +48,9 @@ class _Register1State extends State<Register1> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                 SizedBox(
+                  height: 10.0,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -61,7 +64,7 @@ class _Register1State extends State<Register1> {
                       ),
                     ),
                     Container(
-                      height: 50.0,
+                      height: 35.0,
                       child:
                           Image(image: AssetImage("assets/images/reloj.png")),
                     )
@@ -83,7 +86,7 @@ class _Register1State extends State<Register1> {
                       ),
                     ),
                     Container(
-                      height: 30.0,
+                      height: 25.0,
                       child:
                           Image(image: AssetImage("assets/images/directo.png")),
                     )
