@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/screens/noConnection.dart';
 import 'package:residente/screens/register1.dart';
+import 'package:residente/screens/start.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'models/residente.dart';
@@ -72,7 +73,7 @@ _testConnection(context) async {
   }
 
   _obtenerVentanaInicial(context) {
-    //localDb.save(Campos.cod_residente, null);
+    localDb.save(Campos.cod_residente, null);
     //localDb.save(Campos.cod_garita, "hola");
     try {
       localDb.read(Campos.cod_residente).then((data) {
@@ -85,7 +86,8 @@ _testConnection(context) async {
           _obtenerDatos();
         } else {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Register1()));
+              //context, MaterialPageRoute(builder: (context) => Register1()));
+              context, MaterialPageRoute(builder: (context) => Start()));
         }
       });
     } catch (e) {}

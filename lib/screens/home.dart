@@ -17,7 +17,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 
 class Home extends StatefulWidget {
-  Home() : super();
+  //Home() : super();
 
   final String title = "Alerta";
 
@@ -58,9 +58,14 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _inicio(),
-      backgroundColor: MyColors.white,
+    return WillPopScope(
+      onWillPop: () {
+        return new Future(() => false);
+      },
+      child: Scaffold(
+        body: _inicio(),
+        backgroundColor: MyColors.white,
+      ),
     );
   }
 

@@ -3,5 +3,7 @@
     "telemetry.enableCrashReporter": false,
     "telemetry.enableTelemetry": false,
     "workbench.settings.enableNaturalLanguageSearch": false,
-    "npm.fetchOnlinePackageInfo": false
+    "npm.fetchOnlinePackageInfo": false,
+    "debug.console.fontSize": 12,
+    "editor.fontSize": 14
 }

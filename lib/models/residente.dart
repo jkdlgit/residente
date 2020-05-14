@@ -76,6 +76,7 @@ class MyColors{
 }
 
 class TamanioTexto{
+  static double logo=26.0;
   static double titulo=22.0;
   static double subtitulo=18.0;
   static double texto_pequenio=15.0;

@@ -24,14 +24,19 @@ class _Register1State extends State<Register1> {
   bool codeState = true;
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        elevation: 0.0,
+    return WillPopScope(
+      onWillPop: () {
+        return new Future(() => false);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomPadding: true,
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: MyColors.white_grey,
+        ),
+        body: body(context),
         backgroundColor: MyColors.white_grey,
       ),
-      body: body(context),
-      backgroundColor: MyColors.white_grey,
     );
   }
 
@@ -92,7 +97,18 @@ class _Register1State extends State<Register1> {
                   ),
                 ),
                 SizedBox(
-                  height: 25.0,
+                  height: 10.0,
+                ),
+                Text(
+                  global.app_name,
+                  style: TextStyle(
+                    color: MyColors.sapphire,
+                    fontSize: TamanioTexto.logo,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 45.0,
                 ),
                 Text(
                   '¿Cual es tu código?',

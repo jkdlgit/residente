@@ -25,13 +25,18 @@ class _Register1State extends State<Register2> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
+    return WillPopScope(
+      onWillPop: () {
+        return new Future(() => false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: MyColors.white_grey,
+        ),
+        body: body(),
         backgroundColor: MyColors.white_grey,
       ),
-      body: body(),
-      backgroundColor: MyColors.white_grey,
     );
   }
 
@@ -51,6 +56,19 @@ class _Register1State extends State<Register2> {
                           image: AssetImage("assets/images/campana2.png")),
                     ),
                   ),
+
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    global.app_name,
+                    style: TextStyle(
+                      color: MyColors.sapphire,
+                      fontSize: TamanioTexto.logo,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
                   SizedBox(height: 25.0),
 
                   Text(

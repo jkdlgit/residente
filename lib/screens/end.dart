@@ -31,14 +31,16 @@ class _EndState extends State<End> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'End',
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: _body(context),
-        backgroundColor: MyColors.sapphire,
-      ),
-    );
+    return WillPopScope(
+      onWillPop: () {
+        return new Future(() => false);
+      },
+      child: Scaffold(
+          body: _body(context),
+          backgroundColor: MyColors.sapphire,
+        ),
+      );
+    
   }
 
   _body(BuildContext context) {
