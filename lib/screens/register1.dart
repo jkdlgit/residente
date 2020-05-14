@@ -8,6 +8,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
 import 'package:residente/screens/register2.dart';
+import 'package:residente/utils/methos.dart';
 
 class Register1 extends StatefulWidget {
   @override
@@ -216,8 +217,9 @@ class _Register1State extends State<Register1> {
   }
 
   _verificarRegistro(context) async {
-    pr = new ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
+    pr =Methods.getPopUp(context);
+    /*pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);*/
     await pr.show();
     try {
       if (myController.text.length > 0) {
