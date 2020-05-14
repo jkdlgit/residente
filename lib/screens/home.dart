@@ -74,7 +74,7 @@ class HomeState extends State<Home> {
           elevation: 0.0,
         ),
         body: _inicio(),
-        backgroundColor: MyColors.white_ligth,
+        backgroundColor: MyColors.sapphire,
       ),
     );
   }
@@ -110,8 +110,8 @@ class HomeState extends State<Home> {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20)),
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15)),
           color: MyColors.sapphire,
         ),
         width: MediaQuery.of(context).size.width,
@@ -126,7 +126,8 @@ class HomeState extends State<Home> {
                 child: Container(
                   child: Image(
                     image: AssetImage("assets/images/campana.png"),
-                    width: 50,
+                    width: 65
+                    ,
                   ),
                 ),
               ),
@@ -289,7 +290,7 @@ class HomeState extends State<Home> {
                 child: Text(
                   'Tiempo de espera',
                   style: TextStyle(
-                      color: MyColors.sapphire,
+                      color: MyColors.white,
                       fontSize: TamanioTexto.subtitulo,
                       fontWeight: FontWeight.bold),
                 ),
@@ -309,7 +310,7 @@ class HomeState extends State<Home> {
           child: Text(
             'Tipo de visita',
             style: TextStyle(
-                color: MyColors.sapphire,
+                color: MyColors.white,
                 fontSize: TamanioTexto.subtitulo,
                 fontWeight: FontWeight.bold),
           ),
@@ -328,6 +329,7 @@ class HomeState extends State<Home> {
               onTap: () {
                 setState(() {
                   indexSelected = index;
+                  print("SELECCION:  "+indexSelected.toString());
                 });
               },
               child: CircleAvatar(
@@ -346,6 +348,7 @@ class HomeState extends State<Home> {
               onTap: () {
                 setState(() {
                   indexSelected = index;
+                  print("SELECCION:  "+indexSelected.toString());
                 });
                 // print(index);
                 _estabecerDatosAlerta(null, null, times[index]);
@@ -394,6 +397,8 @@ class HomeState extends State<Home> {
     global.usAlerta.tipo = (_tipo != null) ? _tipo : global.usAlerta.tipo;
     global.usAlerta.duracion =
         (_duracion != null) ? _duracion : global.usAlerta.duracion;
+
+        print("datos alerta   cod:"+ global.usAlerta.codigo+"  tipo: "+global.usAlerta.tipo +"   duracion: "+global.usAlerta.duracion);
 /*
     print('CODIGO: ' +
         ((global.usAlerta.codigo != null) ? global.usAlerta.codigo : '') +

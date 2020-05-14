@@ -63,7 +63,7 @@ class Methods {
   {
     if(code!= null)
     {
-      if(code>0)
+      if(int.parse(code)>0)
       {
         return true;
       }
