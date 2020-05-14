@@ -73,7 +73,7 @@ _testConnection(context) async {
   }
 
   _obtenerVentanaInicial(context) {
-    localDb.save(Campos.cod_residente, null);
+    //localDb.save(Campos.cod_residente, null);
     //localDb.save(Campos.cod_garita, "hola");
     try {
       localDb.read(Campos.cod_residente).then((data) {

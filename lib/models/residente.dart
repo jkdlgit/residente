@@ -73,6 +73,9 @@ class MyColors{
  static Color tory_blue=Color(0xff2B4292);
  static Color white_grey=Color(0xffFEFEFE);
  static Color white_grey_ligth=Color(0xffF9FAF5);
+ static Color white_ligth=Color(0xfff7f9fa);
+   
+ 
 }
 
 class TamanioTexto{

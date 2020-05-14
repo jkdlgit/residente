@@ -248,16 +248,7 @@ class _Register1State extends State<Register2> {
     );
   }
 
-  bool _inputsCorrect() {
-    String name = myControllerNombre.text.trim();
-    String lasName = myControllerFamilia.text.trim();
-    String addres = myControllerDireccion.text.trim();
-    if (name.length > 0 && lasName.length > 0 && addres.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  
 
   _verificarRegistro(context) async {
     pr = new ProgressDialog(context,
@@ -265,7 +256,10 @@ class _Register1State extends State<Register2> {
     await pr.show();
     
     try {
-      if (_inputsCorrect()) {
+      if (Methods.inputsCorrect(myControllerNombre.text,
+      myControllerFamilia.text,
+      myControllerDireccion.text
+      )) {
         if (global.residente != null) {
           global.residente.nombre = myControllerNombre.text;
           global.residente.familia = myControllerFamilia.text;

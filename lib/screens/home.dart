@@ -57,8 +57,6 @@ class HomeState extends State<Home> {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -66,12 +64,22 @@ class HomeState extends State<Home> {
         return new Future(() => false);
       },
       child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Darwin Cabezas',
+            style: TextStyle(color: MyColors.moccasin),
+          ),
+          automaticallyImplyLeading: false,
+          backgroundColor: MyColors.sapphire,
+          elevation: 0.0,
+        ),
         body: _inicio(),
-        backgroundColor: MyColors.white,
+        backgroundColor: MyColors.white_ligth,
       ),
     );
   }
 
+/*
   _cardSuperior() {
     return Card(
       shape: RoundedRectangleBorder(
@@ -83,22 +91,68 @@ class HomeState extends State<Home> {
       color: MyColors.white,
       child: Center(
         child: Container(
+          color: MyColors.sapphire,
           width: MediaQuery.of(context).size.width,
           child: FractionallySizedBox(
             widthFactor: 0.3,
             child: Center(
               child: Container(
-                child: Image(image: AssetImage("assets/images/campana2.png")),
+                child: Image(image: AssetImage("assets/images/campana.png"),width: 50,),
               ),
             ),
           ),
         ),
       ),
     );
+  }*/
+
+  _cardSuperior() {
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20)),
+          color: MyColors.sapphire,
+        ),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20.0,
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.3,
+              child: Center(
+                child: Container(
+                  child: Image(
+                    image: AssetImage("assets/images/campana.png"),
+                    width: 50,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5.0,
+            ),
+            Text(
+              'Alert Now',
+              style: TextStyle(
+                  color: MyColors.white,
+                  fontSize: TamanioTexto.subtitulo,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+          ],
+        ));
   }
 
   _cardMedia() {
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
       color: MyColors.white,
       child: Container(
           width: MediaQuery.of(context).size.width,
@@ -113,6 +167,8 @@ class HomeState extends State<Home> {
                   return Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         _buildCircleAvatar(index),
                       ],
@@ -127,6 +183,7 @@ class HomeState extends State<Home> {
 
   _cardInf() {
     return Container(
+      color: MyColors.white_ligth,
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: tipos.length,
@@ -141,35 +198,47 @@ class HomeState extends State<Home> {
 
               _continuar(context);
             },
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 25.0),
-              decoration: BoxDecoration(color: MyColors.white),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Center(
-                        child: Text(
-                          tipo,
-                          style: TextStyle(
-                              color: MyColors.grey60,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold),
+            child: Card(
+              shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+              color: MyColors.white,
+                          child: Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5, top: 10,bottom: 10),
+                
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                    decoration: BoxDecoration(color: MyColors.white),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Center(
+                              child: Text(
+                                tipo,
+                                style: TextStyle(
+                                    color: MyColors.sapphire,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
             ),
+            
           );
         },
       ),
     );
   }
 
+/*
   _inicio() {
     return Padding(
       padding: EdgeInsets.only(top: 25.0),
@@ -205,6 +274,51 @@ class HomeState extends State<Home> {
         ],
       ),
     );
+  }*/
+
+  _inicio() {
+    return Flex(
+      direction: Axis.vertical,
+      children: <Widget>[
+        _cardSuperior(),
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(4.0),
+                child: Text(
+                  'Tiempo de espera',
+                  style: TextStyle(
+                      color: MyColors.sapphire,
+                      fontSize: TamanioTexto.subtitulo,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        /*Expanded(
+            //flex: 11,
+            child: _cardSuperior(),
+          ),*/
+
+        _cardMedia(),
+        Padding(
+          padding: EdgeInsets.all(4.0),
+          child: Text(
+            'Tipo de visita',
+            style: TextStyle(
+                color: MyColors.sapphire,
+                fontSize: TamanioTexto.subtitulo,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          child: _cardInf(),
+        ),
+      ],
+    );
   }
 
   _buildCircleAvatar(int index) {
@@ -222,7 +336,9 @@ class HomeState extends State<Home> {
                 child: Text(
                   times[index].toString(),
                   style: TextStyle(
-                      fontSize: 45, color: MyColors.sapphire), //Colors.white),
+                      fontSize: 40,
+                      color: MyColors.sapphire,
+                      fontWeight: FontWeight.bold), //Colors.white),
                 ),
               ),
             )
@@ -236,10 +352,10 @@ class HomeState extends State<Home> {
               },
               child: CircleAvatar(
                 radius: 30.0,
-                backgroundColor: MyColors.lavender_blue, //Color(0xffD2F6F3),
+                backgroundColor: MyColors.sapphire, //Color(0xffD2F6F3),
                 child: Text(
                   times[index].toString(),
-                  style: TextStyle(fontSize: 30, color: MyColors.sapphire),
+                  style: TextStyle(fontSize: 30, color: MyColors.white),
                 ),
               ),
             ),
@@ -422,8 +538,6 @@ class HomeState extends State<Home> {
       ),
     );
   }
-
-  
 
   // _testConnection() async{
 /*
