@@ -48,4 +48,27 @@ class Methods {
     )..show(context);
   }
 
+  static bool inputsCorrect(_name,_lastName,address) {
+    String name = _name.text.trim();
+    String lasName = _lastName.text.trim();
+    String addres = address.text.trim();
+    if (name.length > 0 && lasName.length > 0 && addres.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static bool alertCodeValidate(code)
+  {
+    if(code!= null)
+    {
+      if(code>0)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }

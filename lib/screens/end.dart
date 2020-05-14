@@ -192,20 +192,9 @@ class _EndState extends State<End> {
     );
   }
 
-  bool validarCodigo()
-  {
-    if(global.usAlerta.codigo != null)
-    {
-      if(global.usAlerta.codigo.length>0)
-      {
-        return true;
-      }
-    }
-    return false;
-  }
 
   createData() async {
-    if (validarCodigo()) {
+    if (Methods.alertCodeValidate(global.usAlerta.codigo)) {
       datosEnvioCorrectos = true;
       DocumentReference ref = await db
           .collection(Coleccion.registro_garita)
