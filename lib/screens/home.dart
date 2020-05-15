@@ -194,10 +194,16 @@ class HomeState extends State<Home> {
           return GestureDetector(
             onTap: () {
               //print('hola');
-
+             
               _estabecerDatosAlerta(null, tipos[index], null);
-
-              _continuar(context);
+             
+             
+             try{
+                _continuar(context);
+              }catch(e)
+             {
+               int i=0;
+             }
             },
             child: Card(
               shape: RoundedRectangleBorder(
@@ -392,11 +398,13 @@ class HomeState extends State<Home> {
   }
 
   _estabecerDatosAlerta(String _codigo, String _tipo, String _duracion) {
+    try{
     global.usAlerta.codigo =
         (_codigo != null) ? _codigo : global.usAlerta.codigo;
     global.usAlerta.tipo = (_tipo != null) ? _tipo : global.usAlerta.tipo;
     global.usAlerta.duracion =
         (_duracion != null) ? _duracion : global.usAlerta.duracion;
+    
 
         print("datos alerta   cod:"+ global.usAlerta.codigo+"  tipo: "+global.usAlerta.tipo +"   duracion: "+global.usAlerta.duracion);
 /*
@@ -407,9 +415,16 @@ class HomeState extends State<Home> {
         ' DURACION: ' +
         ((global.usAlerta.duracion != null) ? global.usAlerta.duracion : '')
             .toString());*/
+
+            }
+    catch(e)
+    {
+      int i=0;
+    }
   }
 
   _continuar(context) {
+    print('CODIGO ACTUAL:  '+((global.usAlerta.codigo!=null)?global.usAlerta.codigo:"NULL"));
     if (global.usAlerta.codigo != null) {
       Navigator.push(
         context,
