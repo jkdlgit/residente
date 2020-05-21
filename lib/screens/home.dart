@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -12,27 +10,19 @@ import 'package:residente/models/times.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/screens/end.dart';
 import 'package:residente/screens/noConnection.dart';
-import 'package:residente/utils/methos.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
 import 'package:data_connection_checker/data_connection_checker.dart';
 
 class Home extends StatefulWidget {
-  //Home() : super();
-
   final String title = "Alerta";
-
   @override
   HomeState createState() => HomeState();
 }
 
 final db = Firestore.instance;
-bool mostrarMensaje = false;
 ProgressDialog pr;
 
 class HomeState extends State<Home> {
-  //
-
   int indexSelected = 1;
 
   @override
@@ -40,10 +30,8 @@ class HomeState extends State<Home> {
     super.initState();
 
     _testConnection(context);
-    //_testConnection().timeout(const Duration(seconds: 10));
     global.usAlerta.codigo = null;
-    _obtenerCodigoAlerta();
-    //_cancelAlert();
+    _getAlertCode();
   }
 
   _testConnection(context) async {
@@ -79,33 +67,6 @@ class HomeState extends State<Home> {
     );
   }
 
-/*
-  _cardSuperior() {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15.0),
-          topRight: Radius.circular(15.0),
-        ),
-      ),
-      color: MyColors.white,
-      child: Center(
-        child: Container(
-          color: MyColors.sapphire,
-          width: MediaQuery.of(context).size.width,
-          child: FractionallySizedBox(
-            widthFactor: 0.3,
-            child: Center(
-              child: Container(
-                child: Image(image: AssetImage("assets/images/campana.png"),width: 50,),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }*/
-
   _cardSuperior() {
     return Container(
         decoration: BoxDecoration(
@@ -126,8 +87,7 @@ class HomeState extends State<Home> {
                 child: Container(
                   child: Image(
                     image: AssetImage("assets/images/campana.png"),
-                    width: 65
-                    ,
+                    width: 65,
                   ),
                 ),
               ),
@@ -193,95 +153,49 @@ class HomeState extends State<Home> {
 
           return GestureDetector(
             onTap: () {
-              //print('hola');
-             
-              _estabecerDatosAlerta(null, tipos[index], null);
-             
-             
-             try{
-                _continuar(context);
-              }catch(e)
-             {
-               int i=0;
-             }
+              _setAlertData(null, tipos[index], null);
+              try {
+                _next(context);
+              } catch (e) {}
             },
             child: Card(
               shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
               color: MyColors.white,
-                          child: Padding(
-                padding: const EdgeInsets.only(left: 5, right: 5, top: 10,bottom: 10),
-                
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 15.0),
-                    decoration: BoxDecoration(color: MyColors.white),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Center(
-                              child: Text(
-                                tipo,
-                                style: TextStyle(
-                                    color: MyColors.sapphire,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 5, right: 5, top: 10, bottom: 10),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 15.0),
+                  decoration: BoxDecoration(color: MyColors.white),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Center(
+                            child: Text(
+                              tipo,
+                              style: TextStyle(
+                                  color: MyColors.sapphire,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
+              ),
             ),
-            
           );
         },
       ),
     );
   }
-
-/*
-  _inicio() {
-    return Padding(
-      padding: EdgeInsets.only(top: 25.0),
-      child: Flex(
-        direction: Axis.vertical,
-        children: <Widget>[
-
-
-          Expanded(
-            //flex: 11,
-            child: _cardSuperior(),
-          ),
-          Padding(
-            padding: EdgeInsets.all(4.0),
-            child: Text(
-              'Tiempo de espera',
-              style: TextStyle(
-                  color: MyColors.sapphire, fontSize: TamanioTexto.subtitulo),
-            ),
-          ),
-          _cardMedia(),
-          Padding(
-            padding: EdgeInsets.all(4.0),
-            child: Text(
-              'Tipo de visita',
-              style: TextStyle(
-                  color: MyColors.sapphire, fontSize: TamanioTexto.subtitulo),
-            ),
-          ),
-          Expanded(
-            child: _cardInf(),
-          ),
-        ],
-      ),
-    );
-  }*/
 
   _inicio() {
     return Flex(
@@ -304,12 +218,6 @@ class HomeState extends State<Home> {
             ],
           ),
         ),
-
-        /*Expanded(
-            //flex: 11,
-            child: _cardSuperior(),
-          ),*/
-
         _cardMedia(),
         Padding(
           padding: EdgeInsets.all(4.0),
@@ -335,7 +243,7 @@ class HomeState extends State<Home> {
               onTap: () {
                 setState(() {
                   indexSelected = index;
-                  print("SELECCION:  "+indexSelected.toString());
+                  
                 });
               },
               child: CircleAvatar(
@@ -354,14 +262,12 @@ class HomeState extends State<Home> {
               onTap: () {
                 setState(() {
                   indexSelected = index;
-                  print("SELECCION:  "+indexSelected.toString());
                 });
-                // print(index);
-                _estabecerDatosAlerta(null, null, times[index]);
+                _setAlertData(null, null, times[index]);
               },
               child: CircleAvatar(
                 radius: 30.0,
-                backgroundColor: MyColors.sapphire, //Color(0xffD2F6F3),
+                backgroundColor: MyColors.sapphire,
                 child: Text(
                   times[index].toString(),
                   style: TextStyle(fontSize: 30, color: MyColors.white),
@@ -371,7 +277,7 @@ class HomeState extends State<Home> {
     );
   }
 
-  _obtenerCodigoAlerta() {
+  _getAlertCode() {
     if (global.usAlerta.codigo == null) {
       DocumentReference userQuery = db
           .collection(Coleccion.registro_garita)
@@ -388,7 +294,7 @@ class HomeState extends State<Home> {
                 (int.parse(codigo) + 1).toString(),
                 global.residente.documentIdGarita);
 
-            _estabecerDatosAlerta(codigo, null, times[indexSelected]);
+            _setAlertData(codigo, null, times[indexSelected]);
           } else {
             _mostrarPopUp();
           }
@@ -397,41 +303,24 @@ class HomeState extends State<Home> {
     }
   }
 
-  _estabecerDatosAlerta(String _codigo, String _tipo, String _duracion) {
-    try{
-    global.usAlerta.codigo =
-        (_codigo != null) ? _codigo : global.usAlerta.codigo;
-    global.usAlerta.tipo = (_tipo != null) ? _tipo : global.usAlerta.tipo;
-    global.usAlerta.duracion =
-        (_duracion != null) ? _duracion : global.usAlerta.duracion;
-    
+  _setAlertData(String _codigo, String _tipo, String _duracion) {
+    try {
+      global.usAlerta.codigo =
+          (_codigo != null) ? _codigo : global.usAlerta.codigo;
+      global.usAlerta.tipo = (_tipo != null) ? _tipo : global.usAlerta.tipo;
+      global.usAlerta.duracion =
+          (_duracion != null) ? _duracion : global.usAlerta.duracion;
 
-        print("datos alerta   cod:"+ global.usAlerta.codigo+"  tipo: "+global.usAlerta.tipo +"   duracion: "+global.usAlerta.duracion);
-/*
-    print('CODIGO: ' +
-        ((global.usAlerta.codigo != null) ? global.usAlerta.codigo : '') +
-        '  TIPO: ' +
-        ((global.usAlerta.tipo != null) ? global.usAlerta.tipo : '') +
-        ' DURACION: ' +
-        ((global.usAlerta.duracion != null) ? global.usAlerta.duracion : '')
-            .toString());*/
-
-            }
-    catch(e)
-    {
-      int i=0;
-    }
+    } catch (e) {}
   }
 
-  _continuar(context) {
-    print('CODIGO ACTUAL:  '+((global.usAlerta.codigo!=null)?global.usAlerta.codigo:"NULL"));
+  _next(context) {
     if (global.usAlerta.codigo != null) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => End()),
       );
     } else {
-      //_mostrarMensaje("Generando código, por favor espere...",context);
       startTimer();
     }
   }
@@ -443,6 +332,7 @@ class HomeState extends State<Home> {
         .document(documentId)
         .updateData({field: value});
   }
+
 //REVISAR
   _mostrarPopUp() {
     var alertStyle = AlertStyle(
@@ -473,12 +363,7 @@ class HomeState extends State<Home> {
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           onPressed: () {
-            _obtenerCodigoAlerta();
-
-            /*Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            );*/
+            _getAlertCode();
           },
           color: MyColors.sapphire,
         ),
@@ -497,7 +382,6 @@ class HomeState extends State<Home> {
   _mostrarMensaje(String _mensaje, context) {
     setState(() {
       global.mensaje = _mensaje;
-      mostrarMensaje = true;
     });
 
     return Flushbar(
@@ -516,7 +400,6 @@ class HomeState extends State<Home> {
     )..show(context);
   }
 
-//            startTimer();
   int contWaitCode = 0;
   Timer _timer;
   void startTimer() async {
@@ -538,7 +421,6 @@ class HomeState extends State<Home> {
               context,
               MaterialPageRoute(builder: (context) => End()),
             );
-            //corrcto, lanzar siguiente ventana
           }
 
           if (contWaitCode > 10) {
@@ -546,11 +428,6 @@ class HomeState extends State<Home> {
             timer.cancel();
             pr.hide();
             _mostrarMensaje("No se pudo obtener codigo", context);
-            //mostrar mensaje de error, no se pudo obtener el codigo y
-            //volver a intentarlo,
-            //lanzando nuevamente esta ventana
-            //pero como pop up con dos opcines
-            //reintentar o salir
           } else {
             contWaitCode = contWaitCode + 1;
           }
@@ -558,19 +435,4 @@ class HomeState extends State<Home> {
       ),
     );
   }
-
-  // _testConnection() async{
-/*
-    try {
-      final result = await InternetAddress.lookup('google.com').timeout();
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        print('connected');
-      }
-      else{
-        print('No connected');
-      }
-    } on SocketException catch (_) {
-      print('not connected');
-    }*/
-  //}
 }
