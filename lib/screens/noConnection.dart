@@ -1,4 +1,3 @@
-
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:flutter/material.dart';
@@ -12,16 +11,12 @@ class NoConnection extends StatefulWidget {
   _NoConnectionState createState() => _NoConnectionState();
 }
 
-
-
 class _NoConnectionState extends State<NoConnection> {
-
-bool hasConnection = false;
+  bool hasConnection = false;
   ProgressDialog pr;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return WillPopScope(
       onWillPop: () {
         return new Future(() => false);
@@ -63,8 +58,8 @@ bool hasConnection = false;
                       widthFactor: 0.3,
                       heightFactor: 0.3,
                       child: Container(
-                        child:
-                            Image(image: AssetImage("assets/images/nowifi.png")),
+                        child: Image(
+                            image: AssetImage("assets/images/nowifi.png")),
                       ),
                     ),
                   )
@@ -107,28 +102,20 @@ bool hasConnection = false;
 
     if (hasConnection) {
       pr.hide();
-      print("conexion");
       Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Home()),
-    );
-      
+        context,
+        MaterialPageRoute(builder: (context) => Home()),
+      );
     } else {
       pr.hide();
-      _showMessage("No tienes conexión a internet.",context);
-      //print("no conexion");
+      _showMessage("No tienes conexión a internet.", context);
     }
   }
-
-
 
   _showMessage(String _mensaje, context) {
     setState(() {
       global.mensaje = _mensaje;
     });
-return Methods.getMessage(_mensaje, context);
+    return Methods.getMessage(_mensaje, context);
   }
-
-
-
 }
