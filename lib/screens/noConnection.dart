@@ -1,13 +1,11 @@
 
 import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/main.dart';
 import 'package:residente/models/residente.dart';
 import 'package:residente/screens/register1.dart';
-import 'package:residente/utils/internetConnection.dart';
 import 'package:residente/utils/methos.dart';
 
 class NoConnection extends StatefulWidget {
