@@ -113,7 +113,7 @@ bool hasConnection = false;
       print("conexion");
       Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomeTemp()),
+      MaterialPageRoute(builder: (context) => Home()),
     );
       
     } else {
