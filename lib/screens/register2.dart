@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
@@ -14,7 +13,6 @@ class Register2 extends StatefulWidget {
 }
 
 final db = Firestore.instance;
-bool mostrarMensaje = false;
 final localDb = LocalDataBase();
 final myController = TextEditingController();
 
@@ -31,10 +29,6 @@ class _Register1State extends State<Register2> {
         return new Future(() => false);
       },
       child: Scaffold(
-        /*appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: MyColors.white_grey,
-        ),*/
         body: SafeArea(child: body()),
         backgroundColor: MyColors.white_grey,
       ),
@@ -223,19 +217,16 @@ class _Register1State extends State<Register2> {
                 child: FlatButton(
                   color: MyColors.sapphire,
                   onPressed: () {
-                    setState(() {
-                      mostrarMensaje = false;
-                    });
-
-                    _verificarRegistro(context);
+                    _registryVerification(context);
                   },
                   child: Text(
                     'FINALIZAR',
                     style: TextStyle(letterSpacing: 1.5, color: MyColors.white),
                   ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(22.0),
-                      side: BorderSide(color: MyColors.white)),
+                    borderRadius: new BorderRadius.circular(22.0),
+                    side: BorderSide(color: MyColors.white),
+                  ),
                 ),
               ),
             ),
@@ -248,18 +239,14 @@ class _Register1State extends State<Register2> {
     );
   }
 
-  
-
-  _verificarRegistro(context) async {
+  _registryVerification(context) async {
     pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
     await pr.show();
-    
+
     try {
       if (Methods.inputsCorrect(myControllerNombre.text,
-      myControllerFamilia.text,
-      myControllerDireccion.text
-      )) {
+          myControllerFamilia.text, myControllerDireccion.text)) {
         if (global.residente != null) {
           global.residente.nombre = myControllerNombre.text;
           global.residente.familia = myControllerFamilia.text;
@@ -291,21 +278,13 @@ class _Register1State extends State<Register2> {
       }
     } catch (e) {
       pr.hide();
-      _error();
     }
-  }
-
-  _error() {
-    setState(() {
-      mostrarMensaje = false;
-    });
   }
 
   _showMessage(String _mensaje, context) {
     setState(
       () {
         global.mensaje = _mensaje;
-        mostrarMensaje = true;
       },
     );
     return Methods.getMessage(_mensaje, context);
