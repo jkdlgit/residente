@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -16,7 +15,6 @@ class Register1 extends StatefulWidget {
 }
 
 final db = Firestore.instance;
-bool mostrarMensaje = false;
 
 class _Register1State extends State<Register1> {
   final myController = TextEditingController();
@@ -31,10 +29,6 @@ class _Register1State extends State<Register1> {
       },
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
-        /*appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: MyColors.white_grey,
-        ),*/
         body: SafeArea(child: body(context)),
         backgroundColor: MyColors.white_grey,
       ),
@@ -191,19 +185,16 @@ class _Register1State extends State<Register1> {
                 child: FlatButton(
                   color: MyColors.sapphire,
                   onPressed: () {
-                    setState(() {
-                      mostrarMensaje = false;
-                    });
-
-                    _verificarRegistro(context);
+                    _registryVerification(context);
                   },
                   child: Text(
                     'CONTINUAR',
                     style: TextStyle(letterSpacing: 1.5, color: MyColors.white),
                   ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(22.0),
-                      side: BorderSide(color: MyColors.white)),
+                    borderRadius: new BorderRadius.circular(22.0),
+                    side: BorderSide(color: MyColors.white),
+                  ),
                 ),
               ),
             ),
@@ -216,10 +207,8 @@ class _Register1State extends State<Register1> {
     );
   }
 
-  _verificarRegistro(context) async {
+  _registryVerification(context) async {
     pr = Methods.getPopUp(context);
-    /*pr = new ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);*/
     await pr.show();
     try {
       if (myController.text.length > 0) {
@@ -248,7 +237,6 @@ class _Register1State extends State<Register1> {
               global.residente = residente;
 
               pr.hide();
-
               _continuar(context);
             } else {
               pr.hide();
@@ -267,7 +255,6 @@ class _Register1State extends State<Register1> {
       }
     } catch (e) {
       pr.hide();
-      _error();
     }
   }
 
@@ -282,26 +269,8 @@ class _Register1State extends State<Register1> {
   _showMessage(String _mensaje, context) {
     setState(() {
       global.mensaje = _mensaje;
-      mostrarMensaje = true;
     });
     return Methods.getMessage(_mensaje, context);
-  }
-
-  _error() {
-    setState(() {
-      mostrarMensaje = false;
-    });
-  }
-
-  Future<bool> _verificarConexion() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        return true;
-      }
-    } on SocketException catch (_) {
-      return false;
-    }
   }
 
   _continuar(context) {

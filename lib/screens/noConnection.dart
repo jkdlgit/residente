@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/main.dart';
 import 'package:residente/models/residente.dart';
-import 'package:residente/screens/register1.dart';
 import 'package:residente/utils/methos.dart';
 
 class NoConnection extends StatefulWidget {
@@ -126,7 +125,6 @@ bool hasConnection = false;
   _showMessage(String _mensaje, context) {
     setState(() {
       global.mensaje = _mensaje;
-      mostrarMensaje = true;
     });
 return Methods.getMessage(_mensaje, context);
   }
