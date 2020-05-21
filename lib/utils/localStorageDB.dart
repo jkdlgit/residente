@@ -1,6 +1,4 @@
 import 'package:shared_preferences/shared_preferences.dart';
-//ARCHIVO  .yaml
-//shared_preferences: ^0.5.6+1
 
 class LocalDataBase {
   Future<String> read(String _keyName) async {
@@ -19,12 +17,5 @@ class LocalDataBase {
     final prefs = await SharedPreferences.getInstance();
     final key = _keyName.toUpperCase();
     prefs.setString(key, _value);
-    _readx(_keyName);
-  }
-
-  void _readx(String _keyName) async {
-    final prefs = await SharedPreferences.getInstance();
-    final _value = prefs.getString(_keyName.toUpperCase()) ?? 'vacio';
-    print('read: $_value');
   }
 }
