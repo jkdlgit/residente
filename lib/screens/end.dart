@@ -7,7 +7,6 @@ import 'package:residente/models/residente.dart';
 import 'dart:async';
 import 'package:residente/screens/home.dart';
 import 'package:residente/utils/methos.dart';
-
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class End extends StatefulWidget {
@@ -25,7 +24,6 @@ class _EndState extends State<End> {
   @override
   void initState() {
     super.initState();
-    //global.usAlerta.codigo="";
     alertaEnviada = false;
     startTimer();
   }
@@ -37,11 +35,10 @@ class _EndState extends State<End> {
         return new Future(() => false);
       },
       child: Scaffold(
-          body: _body(context),
-          backgroundColor: MyColors.sapphire,
-        ),
-      );
-    
+        body: _body(context),
+        backgroundColor: MyColors.sapphire,
+      ),
+    );
   }
 
   _body(BuildContext context) {
@@ -141,10 +138,10 @@ class _EndState extends State<End> {
                       (_timer != null) ? _timer.cancel() : SizedBox.shrink();
                       createData();
                       if (datosEnvioCorrectos) {
-                        _mostrarPopUp(context,true);
+                        _mostrarPopUp(context, true);
                         alertaEnviada = true;
                       } else {
-                        _mostrarPopUp(context,false);
+                        _mostrarPopUp(context, false);
                         alertaEnviada = false;
                       }
                     } else {
@@ -157,8 +154,9 @@ class _EndState extends State<End> {
                         TextStyle(letterSpacing: 1.5, color: MyColors.sapphire),
                   ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(22.0),
-                      side: BorderSide(color: MyColors.white)),
+                    borderRadius: new BorderRadius.circular(22.0),
+                    side: BorderSide(color: MyColors.white),
+                  ),
                 ),
               ),
             ),
@@ -178,12 +176,8 @@ class _EndState extends State<End> {
       (Timer timer) => setState(
         () {
           if (_start < 1) {
- 
-     // _showMessage('Alerta fue cancelada automaticamente', context);
-
             timer.cancel();
             Navigator.pop(context);
-            print('FINLIZADO');
           } else {
             _start = _start - 1;
           }
@@ -191,7 +185,6 @@ class _EndState extends State<End> {
       ),
     );
   }
-
 
   createData() async {
     if (Methods.alertCodeValidate(global.usAlerta.codigo)) {
@@ -229,8 +222,7 @@ class _EndState extends State<End> {
     }
   }
 
-  _mostrarPopUp(context,estadoEnvio) {
-    print(estadoEnvio);
+  _mostrarPopUp(context, estadoEnvio) {
     var alertStyle = AlertStyle(
       animationType: AnimationType.fromTop,
       isCloseButton: false,
@@ -244,18 +236,18 @@ class _EndState extends State<End> {
         ),
       ),
       titleStyle: TextStyle(
-        color: (estadoEnvio)? MyColors.sapphire:Colors.red,
+        color: (estadoEnvio) ? MyColors.sapphire : Colors.red,
       ),
     );
     return Alert(
       style: alertStyle,
       context: context,
       type: AlertType.success,
-      title:(estadoEnvio)? "ALERTA ENVIADA":"ALERTNA NO ENVIADA",
+      title: (estadoEnvio) ? "ALERTA ENVIADA" : "ALERTNA NO ENVIADA",
       buttons: [
         DialogButton(
           child: Text(
-            (estadoEnvio)?"Inicio":"Reintentar",
+            (estadoEnvio) ? "Inicio" : "Reintentar",
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           onPressed: () {
@@ -264,7 +256,7 @@ class _EndState extends State<End> {
               MaterialPageRoute(builder: (context) => Home()),
             );
           },
-          color:(estadoEnvio)? MyColors.sapphire:Colors.red,
+          color: (estadoEnvio) ? MyColors.sapphire : Colors.red,
         ),
         DialogButton(
           child: Text(
@@ -277,6 +269,4 @@ class _EndState extends State<End> {
       ],
     ).show();
   }
-
-  
 }
