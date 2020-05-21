@@ -1,6 +1,5 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/models/residente.dart';
 
@@ -12,14 +11,12 @@ class Methods {
         type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
 
     p.style(
-//      message: 'Downloading file...',
       message: 'Espere por favor...',
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
       insetAnimCurve: Curves.easeInOut,
       progress: 0.0,
-      //progressWidgetAlignment: Alignment.center,
       maxProgress: 100.0,
       progressTextStyle: TextStyle(
           color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
