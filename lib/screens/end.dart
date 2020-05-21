@@ -132,7 +132,7 @@ class _EndState extends State<End> {
           child: Builder(
             builder: (context) => Center(
               child: Container(
-                width: Posiciones.obtenerAnchoBotonInferior(context),
+                width: Posiciones.getBottomButtonSize(context),
                 height: 50.0,
                 child: FlatButton(
                   color: MyColors.white,

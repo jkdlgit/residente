@@ -218,7 +218,7 @@ class _Register1State extends State<Register2> {
           child: Builder(
             builder: (context) => Center(
               child: Container(
-                width: Posiciones.obtenerAnchoBotonInferior(context),
+                width: Posiciones.getBottomButtonSize(context),
                 height: 50.0,
                 child: FlatButton(
                   color: MyColors.sapphire,

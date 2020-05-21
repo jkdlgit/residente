@@ -87,7 +87,7 @@ class TamanioTexto{
 
 class Posiciones{
   static double separacion_inferior_boton=10.0;
-  static double obtenerAnchoBotonInferior(context){
+  static double getBottomButtonSize(context){
     return MediaQuery.of(context).size.width - 20;
   }
 }
