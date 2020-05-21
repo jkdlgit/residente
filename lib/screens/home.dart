@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/models/residente.dart';
-import 'package:residente/models/temp.dart';
 import 'package:residente/models/times.dart';
 import 'package:residente/library/variables_globales.dart' as global;
+import 'package:residente/models/types.dart';
 import 'package:residente/screens/end.dart';
 import 'package:residente/screens/noConnection.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -147,13 +147,13 @@ class HomeState extends State<Home> {
       color: MyColors.white_ligth,
       child: ListView.builder(
         scrollDirection: Axis.vertical,
-        itemCount: tipos.length,
+        itemCount: type.length,
         itemBuilder: (BuildContext context, int index) {
-          final String tipo = tipos[index].toString();
+          final String tipo = type[index].toString();
 
           return GestureDetector(
             onTap: () {
-              _setAlertData(null, tipos[index], null);
+              _setAlertData(null, type[index], null);
               try {
                 _next(context);
               } catch (e) {}
