@@ -1,5 +1,6 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:residente/screens/home.dart';
 import 'package:residente/screens/noConnection.dart';
 import 'package:residente/screens/start.dart';
 import 'package:residente/utils/localStorageDB.dart';
@@ -19,12 +20,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Home(),
+      home: MainHome(),
     );
   }
 }
 
-class Home extends StatelessWidget {
+class MainHome extends StatelessWidget {
   _testConnection(context) async {
     var hasConnection = await DataConnectionChecker().hasConnection;
 
