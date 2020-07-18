@@ -104,7 +104,7 @@ class _NoConnectionState extends State<NoConnection> {
       pr.hide();
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Main()),
+        MaterialPageRoute(builder: (context) => MainHome()),
       );
     } else {
       pr.hide();

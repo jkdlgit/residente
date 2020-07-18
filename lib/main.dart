@@ -20,12 +20,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Main(),
+      home: MainHome(),
     );
   }
 }
 
-class Main extends StatelessWidget {
+class MainHome extends StatelessWidget {
   _testConnection(context) async {
     var hasConnection = await DataConnectionChecker().hasConnection;
 
