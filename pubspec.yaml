@@ -32,6 +32,9 @@ dependencies:
   flushbar: ^1.9.1
   data_connection_checker: ^0.3.4
   permission_handler: ^4.4.0+hotfix.2
+  flutter_inapp_purchase: ^2.2.0
+
+
 
   
 dev_dependencies:
