@@ -75,6 +75,10 @@ buildTypes {
                         'proguard-android-optimize.txt'),
                         'proguard-rules.pro' 
     }
+     debug {
+            minifyEnabled true
+            shrinkResources true
+        }
 }
 
 
