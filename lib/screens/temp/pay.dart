@@ -38,7 +38,10 @@ class _InAppState extends State<InApp> {
           'point_1000',
           '5000_point',
           'android.test.canceled',
-          'pluma_test'
+          'pluma_test',
+          'mouse',
+          'lapiz',
+          'pelota'
         ]
       : ['com.cooni.point1000', 'com.cooni.point5000'];
 
