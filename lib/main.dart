@@ -6,6 +6,7 @@ import 'package:residente/screens/noConnection.dart';
 import 'package:residente/screens/start.dart';
 import 'package:residente/screens/temp/pay.dart';
 import 'package:residente/screens/temp/pay1.dart';
+import 'package:residente/screens/temp/paySuscripcion.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'models/residente.dart';
@@ -13,7 +14,7 @@ import 'models/residente.dart';
 //void main() => runApp(MarketScreen());
 void main() {
   InAppPurchaseConnection.enablePendingPurchases();
-  runApp(MyApp1());
+  runApp(MyApp2());
 }
 
 final localDb = LocalDataBase();
