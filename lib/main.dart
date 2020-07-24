@@ -1,14 +1,20 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/screens/noConnection.dart';
 import 'package:residente/screens/start.dart';
 import 'package:residente/screens/temp/pay.dart';
+import 'package:residente/screens/temp/pay1.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'models/residente.dart';
 
-void main() => runApp(MyApp1());
+//void main() => runApp(MarketScreen());
+void main() {
+  InAppPurchaseConnection.enablePendingPurchases();
+  runApp(MyApp1());
+}
 
 final localDb = LocalDataBase();
 Residente residente = new Residente();
@@ -21,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: InApp(), //MainHome(),
+      home: MarketScreen(), //MainHome(),
     );
   }
 }
