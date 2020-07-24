@@ -54,7 +54,8 @@ class HomeState extends State<Home> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Darwin Cabezas',
+            global.residente.nombre + ' ' + global.residente.familia,
+            //'Darwin Cabezas',
             style: TextStyle(color: MyColors.moccasin),
           ),
           automaticallyImplyLeading: false,
@@ -243,7 +244,6 @@ class HomeState extends State<Home> {
               onTap: () {
                 setState(() {
                   indexSelected = index;
-                  
                 });
               },
               child: CircleAvatar(
@@ -310,7 +310,6 @@ class HomeState extends State<Home> {
       global.usAlerta.tipo = (_tipo != null) ? _tipo : global.usAlerta.tipo;
       global.usAlerta.duracion =
           (_duracion != null) ? _duracion : global.usAlerta.duracion;
-
     } catch (e) {}
   }
 
