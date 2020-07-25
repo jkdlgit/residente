@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/screens/noConnection.dart';
+import 'package:residente/screens/register1.dart';
 import 'package:residente/screens/start.dart';
+import 'package:residente/screens/suscription.dart';
 import 'package:residente/screens/temp/pay.dart';
 import 'package:residente/screens/temp/pay1.dart';
 import 'package:residente/screens/temp/paySuscripcion.dart';
@@ -14,7 +16,8 @@ import 'models/residente.dart';
 //void main() => runApp(MarketScreen());
 void main() {
   InAppPurchaseConnection.enablePendingPurchases();
-  runApp(MyApp2());
+  //runApp(MyApp2());
+  runApp(MyApp());
 }
 
 final localDb = LocalDataBase();
@@ -28,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MarketScreen(), //MainHome(),
+      home: Suscription(), //MarketScreen(), //MainHome(),
     );
   }
 }
