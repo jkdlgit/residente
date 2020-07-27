@@ -10,14 +10,14 @@ import 'package:residente/models/residente.dart';
 import 'package:residente/screens/register2.dart';
 import 'package:residente/utils/methos.dart';
 
-class Suscription extends StatefulWidget {
+class SuscriptionTankyou extends StatefulWidget {
   @override
-  _SuscriptionState createState() => _SuscriptionState();
+  _SuscriptionTankyouState createState() => _SuscriptionTankyouState();
 }
 
 final db = Firestore.instance;
 
-class _SuscriptionState extends State<Suscription> {
+class _SuscriptionTankyouState extends State<SuscriptionTankyou> {
   final myController = TextEditingController();
   ProgressDialog pr;
 
@@ -48,8 +48,12 @@ class _SuscriptionState extends State<Suscription> {
                   height: 10.0,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
+                    Container(
+                      height: 35.0,
+                      child: Image(image: AssetImage("assets/images/t1.png")),
+                    ),
                     Container(
                       child: Container(
                         width: 50.0,
@@ -59,57 +63,80 @@ class _SuscriptionState extends State<Suscription> {
                         ),
                       ),
                     ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
                     Container(
-                      height: 45.0,
-                      child:
-                          Image(image: AssetImage("assets/images/reloj.png")),
+                      child: Container(
+                        width: 80.0,
+                        height: 60.0,
+                        child: SizedBox(
+                          width: 20.0,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 55.0,
+                      child: Image(image: AssetImage("assets/images/t2.png")),
                     )
                   ],
                 ),
                 Text(
-                  'Suscribete Hoy',
+                  'Gracias!',
                   style: TextStyle(
                     color: MyColors.sapphire,
-                    fontSize: TamanioTexto.logo,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Ayudanos a innovar',
-                  style: TextStyle(
-                    color: MyColors.grey30,
-                    fontSize: TamanioTexto.texto_pequenio,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(
                   height: 30.0,
                 ),
+                FractionallySizedBox(
+                  widthFactor: 0.3,
+                  child: Container(
+                    child: Image(image: AssetImage("assets/images/t3.png")),
+                  ),
+                ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       child: Container(
-                        width: 60.0,
-                        height: 15.0,
+                        width: 110.0,
+                        height: 60.0,
                         child: SizedBox(
-                          width: 30.0,
+                          width: 20.0,
                         ),
                       ),
                     ),
                     Container(
-                      height: 25.0,
-                      child:
-                          Image(image: AssetImage("assets/images/directo.png")),
+                      height: 70.0,
+                      child: Image(image: AssetImage("assets/images/t1.png")),
                     )
                   ],
                 ),
-                FractionallySizedBox(
-                  widthFactor: 0.3,
-                  child: Container(
-                    child: Image(image: AssetImage("assets/images/caja.png")),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Container(
+                      height: 65.0,
+                      child: Image(image: AssetImage("assets/images/t4.png")),
+                    ),
+                    Container(
+                      child: Container(
+                        width: 50.0,
+                        height: 60.0,
+                        child: SizedBox(
+                          width: 20.0,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+
                 /*        AlignPositioned(
                     child:
                         Image(image: AssetImage("assets/images/directo.png")),
@@ -120,22 +147,6 @@ class _SuscriptionState extends State<Suscription> {
                         -0.5, // Move half child width to the left.
                     moveByChildHeight: -0.5),
 /**/ */
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: Container(
-                        width: 0,
-                        height: 15.0,
-                      ),
-                    ),
-                    Container(
-                      height: 100.0,
-                      child:
-                          Image(image: AssetImage("assets/images/directo.png")),
-                    )
-                  ],
-                ),
                 SizedBox(
                   height: 10.0,
                 ),
@@ -150,26 +161,21 @@ class _SuscriptionState extends State<Suscription> {
                 SizedBox(
                   height: 45.0,
                 ),
-                Text(
-                  '\$ 0,99 / mes',
-                  style: TextStyle(
-                    color: MyColors.sapphire,
-                    fontSize: TamanioTexto.logo,
-                    fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.only(left: 30, right: 30),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 0,
+                    child: Text(
+                      'Gracias! acabas de suscribirte, estamos muy contentos y haremos nuestro mejor esfuerzo por mejorar cada día y seguir innovando.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: MyColors.grey60,
+                          fontSize: TamanioTexto.titulo),
+                    ),
                   ),
                 ),
                 SizedBox(
                   height: 20.0,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width - 80,
-                  child: Text(
-                    'Emite alertas libremente y se participe de futuras mejoras en la App.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: MyColors.grey60,
-                        fontSize: TamanioTexto.subtitulo),
-                  ),
                 ),
                 SizedBox(
                   height: 25.0,
@@ -194,7 +200,7 @@ class _SuscriptionState extends State<Suscription> {
                     _registryVerification(context);
                   },
                   child: Text(
-                    'SUSCRIBIRME',
+                    'CONTINUAR',
                     style: TextStyle(letterSpacing: 1.5, color: MyColors.white),
                   ),
                   shape: RoundedRectangleBorder(
