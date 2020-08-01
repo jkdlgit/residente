@@ -6,6 +6,7 @@ import 'package:residente/models/residente.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/utils/methos.dart';
+import 'package:true_time/true_time.dart';
 
 class Register2 extends StatefulWidget {
   @override
@@ -21,6 +22,13 @@ class _Register1State extends State<Register2> {
   final myControllerFamilia = TextEditingController();
   final myControllerDireccion = TextEditingController();
   ProgressDialog pr;
+
+  @override
+  initState() {
+    super.initState();
+    _initPlatformState();
+    _updateCurrentTime();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -262,6 +270,7 @@ class _Register1State extends State<Register2> {
             localDb.save(Campos.familia, global.residente.familia);
             localDb.save(Campos.documentId, global.residente.documentId);
             localDb.save(Campos.nombre, global.residente.nombre);
+            //Consulta y guarda la fecha actual para calcular inicio de proceso de suscripcion
 
             _continuar(context);
           } else {
@@ -331,5 +340,24 @@ class _Register1State extends State<Register2> {
       context,
       MaterialPageRoute(builder: (context) => Home()),
     );
+  }
+
+  bool _initialized = false;
+  DateTime _currentTime;
+
+  _initPlatformState() async {
+    bool initialized = await TrueTime.init();
+    setState(() {
+      _initialized = initialized;
+    });
+    _updateCurrentTime();
+  }
+
+  _updateCurrentTime() async {
+    DateTime now = await TrueTime.now();
+    setState(() {
+      _currentTime = now;
+      print('>' + now.toString() + '<');
+    });
   }
 }

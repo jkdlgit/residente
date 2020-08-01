@@ -4,6 +4,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/screens/noConnection.dart';
 import 'package:residente/screens/register1.dart';
+import 'package:residente/screens/register2.dart';
 import 'package:residente/screens/start.dart';
 import 'package:residente/screens/suscription.dart';
 import 'package:residente/screens/suscriptionTankyou.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SuscriptionTankyou(), //MarketScreen(), //MainHome(),
+      home: Register2(), //SuscriptionTankyou(), //MarketScreen(), //MainHome(),
     );
   }
 }
