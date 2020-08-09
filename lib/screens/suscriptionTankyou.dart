@@ -1,14 +1,15 @@
-import 'dart:io';
+//import 'dart:io';
 
-import 'package:align_positioned/align_positioned.dart';
+//import 'package:align_positioned/align_positioned.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+//import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:residente/library/variables_globales.dart' as global;
+//import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
-import 'package:residente/screens/register2.dart';
-import 'package:residente/utils/methos.dart';
+import 'package:residente/screens/home.dart';
+//import 'package:residente/screens/register2.dart';
+//import 'package:residente/utils/methos.dart';
 
 class SuscriptionTankyou extends StatefulWidget {
   @override
@@ -161,12 +162,20 @@ class _SuscriptionTankyouState extends State<SuscriptionTankyou> {
                 SizedBox(
                   height: 45.0,
                 ),
+                /*
+                Text(
+                  'Gracias! por suscribirte, estamos muy contentos y haremos nuestro mejor esfuerzo por mejorar cada día y seguir innovando.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: MyColors.grey60, fontSize: TamanioTexto.titulo),
+                ),*/
                 Padding(
-                  padding: const EdgeInsets.only(left: 30, right: 30),
+                  padding: const EdgeInsets.all(10.0),
                   child: Container(
-                    width: MediaQuery.of(context).size.width - 0,
+                    width: MediaQuery.of(context).size.width - 5,
                     child: Text(
-                      'Gracias! acabas de suscribirte, estamos muy contentos y haremos nuestro mejor esfuerzo por mejorar cada día y seguir innovando.',
+                      'Gracias por suscribirte, estamos muy contentos y haremos nuestro mejor esfuerzo por mejorar cada día y seguir innovando.',
+                      //'Este es un texto de ejemplo, como podran ver hay palabras que se cortan en la pantalla, lo que deberia suceder es que algun widget ubique esa palabra en la siguiente linea no entiendo por que ahora si funciona correctamente y antes no funcionaba',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: MyColors.grey60,
@@ -197,7 +206,8 @@ class _SuscriptionTankyouState extends State<SuscriptionTankyou> {
                 child: FlatButton(
                   color: MyColors.sapphire,
                   onPressed: () {
-                    _registryVerification(context);
+                    _continuar(context);
+                    //_registryVerification(context);
                   },
                   child: Text(
                     'CONTINUAR',
@@ -218,7 +228,7 @@ class _SuscriptionTankyouState extends State<SuscriptionTankyou> {
       ],
     );
   }
-
+/*
   _registryVerification(context) async {
     pr = Methods.getPopUp(context);
     await pr.show();
@@ -268,8 +278,8 @@ class _SuscriptionTankyouState extends State<SuscriptionTankyou> {
     } catch (e) {
       pr.hide();
     }
-  }
-
+  }*/
+/*
   _guardarDb(
       String collection, String field, String value, String documentId) async {
     await db
@@ -283,12 +293,12 @@ class _SuscriptionTankyouState extends State<SuscriptionTankyou> {
       global.mensaje = _mensaje;
     });
     return Methods.getMessage(_mensaje, context);
-  }
+  }*/
 
   _continuar(context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Register2()),
+      MaterialPageRoute(builder: (context) => Home()),
     );
   }
 }

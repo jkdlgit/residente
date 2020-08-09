@@ -7,3 +7,5 @@ String mensaje;
 UsAlerta usAlerta = new UsAlerta();
 String appName = "Alert Now";
 bool alertaCancelada = false;
+bool isSuscribed = false;
+String suscriptionName = "telefono";

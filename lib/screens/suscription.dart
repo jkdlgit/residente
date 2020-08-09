@@ -1,13 +1,16 @@
+import 'dart:async';
 import 'dart:io';
 
-import 'package:align_positioned/align_positioned.dart';
+//import 'package:align_positioned/align_positioned.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
 import 'package:residente/screens/register2.dart';
+import 'package:residente/screens/suscriptionTankyou.dart';
 import 'package:residente/utils/methos.dart';
 
 class Suscription extends StatefulWidget {
@@ -16,14 +19,120 @@ class Suscription extends StatefulWidget {
 }
 
 final db = Firestore.instance;
+StreamSubscription purchaseUpdatedSubscription;
+StreamSubscription purchaseErrorSubscription;
+StreamSubscription conectionSubscription;
 
 class _SuscriptionState extends State<Suscription> {
   final myController = TextEditingController();
   ProgressDialog pr;
-
   bool codeState = true;
+  String platformVersion = 'Unknown';
+  List<IAPItem> _itemsSuscription = [];
+  List<IAPItem> _itemsProducts = [];
+  //List<IAPItem> _itemsSus = [];
+  //List<PurchasedItem> _purchases = [];
+  //List<PurchasedItem> _purchasesSus = [];
+  //bool purchace_ready = false;
+
+  /*final List<String> _productLists = ["pluma_test"];*/
+  final List<String> _suscriptionLists = Platform.isAndroid
+      ? [
+          'android.test.purchased',
+          'point_1000',
+          '5000_point',
+          'android.test.canceled',
+          'pluma_test',
+          'tv',
+          'telefono',
+          'internet',
+        ]
+      : ['com.cooni.point1000', 'com.cooni.point5000'];
+  final List<String> _productLists = Platform.isAndroid
+      ? [
+          'android.test.purchased',
+          'point_1000',
+          '5000_point',
+          'android.test.canceled',
+          'pluma_test',
+          'lapiz',
+          'mouse',
+          'pelota',
+        ]
+      : ['com.cooni.point1000', 'com.cooni.point5000'];
+
+  @override
+  initState() {
+    super.initState();
+    _initInappPurchase(context);
+    initPlatformState();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await FlutterInappPurchase.instance.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // prepare
+    var result = await FlutterInappPurchase.instance.initConnection;
+    //print('result: $result');
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      platformVersion = platformVersion;
+    });
+
+    // refresh items for android
+    try {
+      String msg = await FlutterInappPurchase.instance.consumeAllItems;
+      //print('consumeAllItems: $msg');
+    } catch (err) {
+      //ingresa aqui cuando no encuentra productos o suscripciones
+      //print('consumeAllItems error: $err');
+    }
+
+    conectionSubscription =
+        FlutterInappPurchase.connectionUpdated.listen((connected) {
+      //print('connected: $connected');
+    });
+
+    purchaseUpdatedSubscription =
+        FlutterInappPurchase.purchaseUpdated.listen((productItem) {
+      if (productItem.productId == global.suscriptionName) {
+        global.isSuscribed = true;
+        _continuar(context);
+      } else {
+        global.isSuscribed = false;
+      }
+      //print('purchase-updated: $productItem');
+    });
+
+    purchaseErrorSubscription =
+        FlutterInappPurchase.purchaseError.listen((purchaseError) {
+      //purchaseError.responseCode:7 significa que el producto o suscripcion
+      //ya fue adquirid@
+      if (purchaseError.responseCode == 7) {
+        global.isSuscribed = true;
+        _continuar(context);
+      } else {
+        global.isSuscribed = false;
+      }
+      //print('purchase-error: $purchaseError');
+    });
+  }
 
   Widget build(BuildContext context) {
+    //if (purchace_ready) {}
+
     return WillPopScope(
       onWillPop: () {
         return new Future(() => false);
@@ -67,7 +176,7 @@ class _SuscriptionState extends State<Suscription> {
                   ],
                 ),
                 Text(
-                  'Suscribete Hoy',
+                  'Suscríbete Hoy',
                   style: TextStyle(
                     color: MyColors.sapphire,
                     fontSize: TamanioTexto.logo,
@@ -75,7 +184,7 @@ class _SuscriptionState extends State<Suscription> {
                   ),
                 ),
                 Text(
-                  'Ayudanos a innovar',
+                  'Ayúdanos a innovar',
                   style: TextStyle(
                     color: MyColors.grey30,
                     fontSize: TamanioTexto.texto_pequenio,
@@ -164,7 +273,7 @@ class _SuscriptionState extends State<Suscription> {
                 Container(
                   width: MediaQuery.of(context).size.width - 80,
                   child: Text(
-                    'Emite alertas libremente y se participe de futuras mejoras en la App.',
+                    'Emite alertas libremente y se partícipe de todo lo que vamos a hacer.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: MyColors.grey60,
@@ -191,7 +300,10 @@ class _SuscriptionState extends State<Suscription> {
                 child: FlatButton(
                   color: MyColors.sapphire,
                   onPressed: () {
-                    _registryVerification(context);
+                    //Inicia el proceso de suscripcion
+                    _requestSubscription(global.suscriptionName);
+
+//                    _suscribe(context);
                   },
                   child: Text(
                     'SUSCRIBIRME',
@@ -213,10 +325,89 @@ class _SuscriptionState extends State<Suscription> {
     );
   }
 
-  _registryVerification(context) async {
+/*ES DE VITAL IMPORTANCIA VIGILAR ESTE METODO YA QUE ES EL PRIMERO QUE INICIA
+PARA EL TEMA DE LA SUSCRIPCION, POR LO TANTO SI ESTE FALLA EL CLIENTE NO SE PODRA SUSCRIBIR
+ADICIONAL A ESTO SI EL CLIENTE NO SE SUSCRIBE, SE SUPONE QUE NO PUEDE USAR LA APP
+PERO ESTO SERIA INJUSTO YA QUE EL PROBLEMA ES DE LA APP. PARA ESTO ES NECESARIO
+QUE SE CAPTURE EL ERROR Y SE LE PERMITA CONTINUAR USANDO NORMALMENTE LA APP SIN QUE 
+NECESITE TERMINAR EL REGISTRO, DESPUES DE UN TIEMPO VOLVER A SUGERIRLE QUE SE SUSCRIBA*/
+  _initInappPurchase(context) async {
+    try {
+      await FlutterInappPurchase.instance.initConnection;
+      //print("---------- Connect Billing Button Pressed");
+      _getSuscription();
+      //print("Se obtubo las suscripciones");
+      _getProduct();
+      //print("Se obtubo productos");
+      setState(() {
+        //purchace_ready = true;
+      });
+    } catch (e) {
+      //Error
+    }
+  }
+
+  Future _getProduct() async {
+    try {
+      List<IAPItem> items =
+          await FlutterInappPurchase.instance.getProducts(_productLists);
+      /*for (var item in items) {
+        print('${item.toString()}');
+        this._itemsProducts.add(item);
+      }*/
+
+      setState(() {
+        this._itemsProducts = items;
+        //this._purchases = [];
+      });
+    } catch (err) {}
+  }
+
+  Future _getSuscription() async {
+    try {
+      List<IAPItem> items = await FlutterInappPurchase.instance
+          .getSubscriptions(_suscriptionLists);
+      setState(() {
+        this._itemsSuscription = items;
+        //this._purchases = [];
+      });
+    } catch (err) {}
+    /*  for (var item in items) {
+      //print('${item.toString()}');
+      this._items.add(item);
+    }*/
+  }
+
+  //void _requestSubscription(IAPItem item) {
+  void _requestSubscription(String productId) async {
+    try {
+      await FlutterInappPurchase.instance
+          .requestSubscription(global.suscriptionName);
+    } catch (err) {}
+  }
+/*
+  Future _getPurchasesSuscription() async {
+    String productId = "";
+    List<PurchasedItem> items =
+        await FlutterInappPurchase.instance.getAvailablePurchases();
+    if (items.length > 0) {
+      productId = items[0].productId;
+      if (productId == global.suscriptionName) {
+        global.isSuscribed = true;
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => SuscriptionTankyou()));
+      }
+    }
+    {
+      global.isSuscribed = false;
+    }
+  }*/
+/*
+  _suscribe(context) async {
+/*
     pr = Methods.getPopUp(context);
     await pr.show();
-    try {
+    
       if (myController.text.length > 0) {
         var userQuery = db
             .collection(Coleccion.registro_garita)
@@ -261,28 +452,28 @@ class _SuscriptionState extends State<Suscription> {
       }
     } catch (e) {
       pr.hide();
-    }
-  }
-
+    }*/
+  }*/
+/*
   _guardarDb(
       String collection, String field, String value, String documentId) async {
     await db
         .collection(collection)
         .document(documentId)
         .updateData({field: value});
-  }
-
+  }*/
+/*
   _showMessage(String _mensaje, context) {
     setState(() {
       global.mensaje = _mensaje;
     });
     return Methods.getMessage(_mensaje, context);
-  }
+  }*/
 
   _continuar(context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Register2()),
+      MaterialPageRoute(builder: (context) => SuscriptionTankyou()),
     );
   }
 }

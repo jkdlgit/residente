@@ -33,7 +33,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Register2(), //SuscriptionTankyou(), //MarketScreen(), //MainHome(),
+      home:
+          Suscription(), //Register2(), //SuscriptionTankyou(), //MarketScreen(), //MainHome(),
     );
   }
 }
