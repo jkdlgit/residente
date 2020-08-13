@@ -9,3 +9,4 @@ String appName = "Alert Now";
 bool alertaCancelada = false;
 bool isSuscribed = false;
 String suscriptionName = "telefono";
+int testDay = 7;

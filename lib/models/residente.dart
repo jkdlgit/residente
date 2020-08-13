@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class Residente {
@@ -22,8 +21,6 @@ class Residente {
       this.documentIdGarita});
 }
 
-
-
 class Campos {
   static String cod_garita = 'cod_garita';
   static String cod_residente = 'cod_residente';
@@ -39,6 +36,8 @@ class Campos {
   static String duracion = 'duracion';
   static String document_id = 'document_id';
 
+  static String contTestDay = 'CONTTESTDAY';
+  static String lastDay = 'LASTDAY';
 }
 
 class Coleccion {
@@ -46,8 +45,6 @@ class Coleccion {
   static String registro_garita = 'registro_garita';
   static String alerta = 'alerta';
 }
-
-
 
 class UsAlerta {
   String codigo;
@@ -58,36 +55,39 @@ class UsAlerta {
   String familia;
   String direccion;
 
-  UsAlerta({this.codigo, this.duracion, this.fecha, this.hashId, this.tipo,this.familia,this.direccion});
+  UsAlerta(
+      {this.codigo,
+      this.duracion,
+      this.fecha,
+      this.hashId,
+      this.tipo,
+      this.familia,
+      this.direccion});
 }
 
-
-
-class MyColors{
- static Color sapphire=Color(0xff0A1C66);
- static Color white=Color(0xffFFFFFF);
- static Color moccasin=Color(0xffFDE0B4);
- static Color lavender_blue=Color(0xffC7DBFE);
- static Color grey30=Color(0xff595856);
- static Color grey60=Color(0xff9A9997);
- static Color tory_blue=Color(0xff2B4292);
- static Color white_grey=Color(0xffFEFEFE);
- static Color white_grey_ligth=Color(0xffF9FAF5);
- static Color white_ligth=Color(0xfff7f9fa);
-   
- 
+class MyColors {
+  static Color sapphire = Color(0xff0A1C66);
+  static Color white = Color(0xffFFFFFF);
+  static Color moccasin = Color(0xffFDE0B4);
+  static Color lavender_blue = Color(0xffC7DBFE);
+  static Color grey30 = Color(0xff595856);
+  static Color grey60 = Color(0xff9A9997);
+  static Color tory_blue = Color(0xff2B4292);
+  static Color white_grey = Color(0xffFEFEFE);
+  static Color white_grey_ligth = Color(0xffF9FAF5);
+  static Color white_ligth = Color(0xfff7f9fa);
 }
 
-class TamanioTexto{
-  static double logo=26.0;
-  static double titulo=22.0;
-  static double subtitulo=18.0;
-  static double texto_pequenio=15.0;
+class TamanioTexto {
+  static double logo = 26.0;
+  static double titulo = 22.0;
+  static double subtitulo = 18.0;
+  static double texto_pequenio = 15.0;
 }
 
-class Posiciones{
-  static double separacion_inferior_boton=10.0;
-  static double getBottomButtonSize(context){
+class Posiciones {
+  static double separacion_inferior_boton = 10.0;
+  static double getBottomButtonSize(context) {
     return MediaQuery.of(context).size.width - 20;
   }
 }

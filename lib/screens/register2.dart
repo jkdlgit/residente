@@ -7,6 +7,7 @@ import 'package:residente/screens/home.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/utils/methos.dart';
 import 'package:true_time/true_time.dart';
+//import 'package:true_time/true_time.dart';
 
 class Register2 extends StatefulWidget {
   @override
@@ -343,6 +344,9 @@ class _Register1State extends State<Register2> {
   }
 
   bool _initialized = false;
+
+//Revisar que al parecer este proceso que sigue no esta haciendo nada
+
   DateTime _currentTime;
 
   _initPlatformState() async {

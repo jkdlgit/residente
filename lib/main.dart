@@ -13,6 +13,7 @@ import 'package:residente/screens/temp/pay1.dart';
 import 'package:residente/screens/temp/paySuscripcion.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/library/variables_globales.dart' as global;
+import 'package:true_time/true_time.dart';
 import 'models/residente.dart';
 
 //void main() => runApp(MarketScreen());
@@ -33,14 +34,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:
-          Suscription(), //Register2(), //SuscriptionTankyou(), //MarketScreen(), //MainHome(),
+      home: MainHome(),
+      //Suscription(), //Register2(), //SuscriptionTankyou(), //MarketScreen(), //MainHome(),
     );
   }
 }
 
 class MainHome extends StatelessWidget {
   _testConnection(context) async {
+    //_initPlatformState();
+
+    _validateDate(context);
+
     var hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
@@ -121,4 +126,87 @@ class MainHome extends StatelessWidget {
       global.residente = residente;
     });
   }
+/*
+  DateTime _currentTime;
+  //bool _initialized = false;
+  _initPlatformState() async {
+    var currDt = DateTime.now();
+    var currentDay = DateTime.now().month;
+
+    print(currDt.year); // 4
+    print(currDt.weekday); // 4
+    print(currDt.month); // 4
+    print(currDt.day); // 2
+    print(currDt.hour); // 15
+    print(currDt.minute); // 21
+    print(currDt.second); // 49
+
+    //_updateCurrentTime();
+  }*/
+
+  _validateDate(context) async {
+    int contTestDay = 0;
+    int lastDay = 0;
+    int toDay = 0;
+    //CARGAR EL CONTADOR DE DIA (FECHA) DESDE EL DISPOSITIVO
+    await localDb.read(Campos.contTestDay).then((data) {
+      try {
+        contTestDay = int.parse(data);
+        print('CONTADOR DE DIAS TIENE: ' + contTestDay.toString());
+      } catch (ex) {
+        print('ERROR 1' + ex.toString());
+        contTestDay = 0;
+      }
+    });
+
+    //SI EL CONTADOR SUPERA EL NUMERO DE PRUEBA DE LA APP (15)
+    if (contTestDay > global.testDay) {
+      print(
+          'contTestDay ES MAYOR QUE  global.testDay' + contTestDay.toString());
+      //LANZAR VENTANA DE SUSCRIPCION
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Suscription()),
+      );
+    } else {
+      //CARGAR EL DIA (FECHA) DE LA BASE LOCAL
+      await localDb.read(Campos.lastDay).then((data) {
+        try {
+          lastDay = int.parse(data);
+          print('ULTIMO DIA TIENE: ' + lastDay.toString());
+        } catch (ex) {
+          print('ERROR 2' + ex.toString());
+          lastDay = 0;
+        }
+
+        //OBTENER EL DIA (FECHA) DL DISPOSITIVO
+        var toDay = DateTime.now().day;
+        toDay = 23;
+        print('DIA ACTUAL ES: ' + toDay.toString());
+        //COMPARAR: SI SON DIFERENTES,
+        if (toDay != lastDay) {
+          //SUMAR UN CONTADOR Y GUARDARLO EN LA BASE LOCAL
+          contTestDay += 1;
+          print('SE INCRMENTO contTestDay: ' + contTestDay.toString());
+          //GUARDAR NUEVO CONTADOR
+          try {
+            localDb.save(Campos.contTestDay, contTestDay.toString());
+            localDb.save(Campos.lastDay, toDay.toString());
+            print('SE GUARDO CORRECTAMENTE  contTestDay Y toDay: ');
+          } catch (ex) {
+            print('ERROR 3' + ex.toString());
+          }
+        }
+      });
+    }
+
+    //COMPARAR: SI SON DIFERENTES,
+    //SUMAR UN CONTADOR Y GUARDARLO EN LA BASE LOCAL
+  }
+/*
+  _updateCurrentTime() async {
+    DateTime now = await TrueTime.now();
+
+    print('>' + now.toString() + '<');
+  }*/
 }
