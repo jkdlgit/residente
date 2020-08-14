@@ -54,7 +54,9 @@ class HomeState extends State<Home> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            global.residente.nombre + ' ' + global.residente.familia,
+            DateTime.now().toString(),
+
+            //global.residente.nombre + ' ' + global.residente.familia,
             //'Darwin Cabezas',
             style: TextStyle(color: MyColors.moccasin),
           ),

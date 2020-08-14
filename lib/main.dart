@@ -13,8 +13,9 @@ import 'package:residente/screens/temp/pay1.dart';
 import 'package:residente/screens/temp/paySuscripcion.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/library/variables_globales.dart' as global;
-import 'package:true_time/true_time.dart';
+//import 'package:true_time/true_time.dart';
 import 'models/residente.dart';
+import 'package:intl/intl.dart';
 
 //void main() => runApp(MarketScreen());
 void main() {
@@ -46,13 +47,15 @@ class MainHome extends StatelessWidget {
 
     var today = DateTime.now();
     var fiftyDaysFromNow = today.add(new Duration(days: 2));
-
+    global.endTryDay = false;
     _validateDate1(context);
 
     var hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      _getStart(context);
+      if (!global.endTryDay) {
+        _getStart(context);
+      }
     } else {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => NoConnection()));
@@ -162,19 +165,23 @@ class MainHome extends StatelessWidget {
       }
     });
 
-    var toDay = DateTime.now();
+    var toDayTime = DateTime.now();
+    String toDay = DateFormat('yyyy-MM-dd').format(toDayTime);
     //toDay = DateTime.parse('2020-08-30 02:38:29.121802');
     if (futureSuscription == null) {
-      var futureSuscription = toDay.add(new Duration(days: global.testDay));
+      var futureSuscription = toDayTime.add(new Duration(days: global.testDay));
+      String futureSuscriptionString =
+          DateFormat('yyyy-MM-dd').format(futureSuscription);
       try {
-        localDb.save(Campos.futureSuscription, futureSuscription.toString());
+        localDb.save(
+            Campos.futureSuscription, futureSuscriptionString.toString());
       } catch (err) {}
       //LANZAR LA MAIN NUEVAMENTE @@@@@@@@@@@@@@
       //CORRECTO!
     } else {
       //toDay = DateTime.parse('2020-08-23 00:13:09.011293');
 
-      if (toDay.toString() == futureSuscription.toString()) {
+      if (toDay == futureSuscription.toString()) {
         //FIN DE SUSCRIPCION
 
         //GUARDA PERIODO DE GRACIA SOLO SI NO EXISTE
@@ -190,17 +197,20 @@ class MainHome extends StatelessWidget {
         if (isActivatedSuscriptionFreeTime == null) {
           isActivatedSuscriptionFreeTime = true;
           var futureSuscription =
-              toDay.add(new Duration(days: global.testDayWait));
+              toDayTime.add(new Duration(days: global.testDayWait));
+          String futureSuscriptionString =
+              DateFormat('yyyy-MM-dd').format(futureSuscription);
           //GUARDA EL TIEMPO DE GRACIA
-          localDb.save(Campos.futureSuscription, futureSuscription.toString());
+          localDb.save(Campos.futureSuscription, futureSuscriptionString);
           localDb.save(Campos.isActivatedSuscriptionFreeTime,
               isActivatedSuscriptionFreeTime.toString());
-
+          global.endTryDay = true;
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Suscription()),
           );
         } else {
+          global.endTryDay = true;
           global.isActivatedSuscriptionFreeTime = true;
           Navigator.push(
             context,

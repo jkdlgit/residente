@@ -39,7 +39,8 @@ dependencies:
   flutter_inapp_purchase: ^2.2.0
   in_app_purchase: ^0.3.4+1
   align_positioned: ^1.2.6
-  true_time: ^0.1.0
+  intl: ^0.16.1
+  
   
 
 

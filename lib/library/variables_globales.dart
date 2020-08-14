@@ -15,3 +15,4 @@ int testDayWait = 3;
 /*REPRESENTA LA CANTIDAD EN DIAS DE GRACIA QUE TENDRA 
                         EL USUARIO*/
 bool isActivatedSuscriptionFreeTime = false;
+bool endTryDay = false;
