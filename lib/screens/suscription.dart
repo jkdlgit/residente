@@ -8,9 +8,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
+import 'package:residente/main.dart';
 import 'package:residente/models/residente.dart';
+import 'package:residente/screens/home.dart';
 import 'package:residente/screens/register2.dart';
 import 'package:residente/screens/suscriptionTankyou.dart';
+import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/utils/methos.dart';
 
 class Suscription extends StatefulWidget {
@@ -18,6 +21,7 @@ class Suscription extends StatefulWidget {
   _SuscriptionState createState() => _SuscriptionState();
 }
 
+final localDb = LocalDataBase();
 final db = Firestore.instance;
 StreamSubscription purchaseUpdatedSubscription;
 StreamSubscription purchaseErrorSubscription;
@@ -290,6 +294,42 @@ class _SuscriptionState extends State<Suscription> {
             ),
           ),
         ),
+        global.isActivatedSuscriptionFreeTime
+            ? SizedBox(
+                height: 0.0,
+              )
+            : Align(
+                alignment: Alignment.bottomCenter,
+                child: Builder(
+                  builder: (context) => Center(
+                    child: Container(
+                      width: Posiciones.getBottomButtonSize(context),
+                      height: 50.0,
+                      child: FlatButton(
+                        color: MyColors.white,
+                        onPressed: () {
+                          //Inicia el proceso de suscripcion
+                          //_requestSubscription(global.suscriptionName);
+                          _setMoreTimeToSuscription();
+//                    _suscribe(context);
+                        },
+                        child: Text(
+                          'DAME MAS TIEMPO',
+                          style: TextStyle(
+                              letterSpacing: 1.5, color: MyColors.sapphire),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(22.0),
+                          side: BorderSide(color: MyColors.lavender_blue),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+        SizedBox(
+          height: Posiciones.separacion_inferior_boton,
+        ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Builder(
@@ -384,6 +424,23 @@ NECESITE TERMINAR EL REGISTRO, DESPUES DE UN TIEMPO VOLVER A SUGERIRLE QUE SE SU
       await FlutterInappPurchase.instance
           .requestSubscription(global.suscriptionName);
     } catch (err) {}
+  }
+
+  _setMoreTimeToSuscription() async {
+    try {
+      if (!global.setMoreTimeSuscription) {
+        try {
+          global.setMoreTimeSuscription = true;
+          localDb.save(
+              Campos.setMoreTimeSuscription, global.testDayWait.toString());
+        } catch (ex) {}
+      }
+    } catch (err) {
+      int i = 0;
+    }
+    //verificar si se lanza main
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MainHome()));
   }
 /*
   Future _getPurchasesSuscription() async {

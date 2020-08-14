@@ -38,6 +38,11 @@ class Campos {
 
   static String contTestDay = 'CONTTESTDAY';
   static String lastDay = 'LASTDAY';
+  static String setMoreTimeSuscription = 'SETMORETIMESUSCRIPTION';
+
+  static String futureSuscription = 'FUTURESUSCRIPTION';
+  static String isActivatedSuscriptionFreeTime =
+      'ISACTIVATEDSUSCRIPTIONFREETIME';
 }
 
 class Coleccion {

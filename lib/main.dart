@@ -44,7 +44,10 @@ class MainHome extends StatelessWidget {
   _testConnection(context) async {
     //_initPlatformState();
 
-    _validateDate(context);
+    var today = DateTime.now();
+    var fiftyDaysFromNow = today.add(new Duration(days: 2));
+
+    _validateDate1(context);
 
     var hasConnection = await DataConnectionChecker().hasConnection;
 
@@ -143,6 +146,73 @@ class MainHome extends StatelessWidget {
 
     //_updateCurrentTime();
   }*/
+
+  _validateDate1(context) async {
+    //localDb.save(Campos.futureSuscription, null);
+    //localDb.save(Campos.isActivatedSuscriptionFreeTime, null);
+    //CARGA FECHA DE SUSCRIPCION SI ES QUE EXISTE
+    var futureSuscription;
+    var isActivatedSuscriptionFreeTime;
+    await localDb.read(Campos.futureSuscription).then((data) {
+      try {
+        futureSuscription = data;
+        print('FUTURE SUSCRIPTION:  ' + futureSuscription.toString());
+      } catch (ex) {
+        print('ERROR 1' + ex.toString());
+      }
+    });
+
+    var toDay = DateTime.now();
+    //toDay = DateTime.parse('2020-08-30 02:38:29.121802');
+    if (futureSuscription == null) {
+      var futureSuscription = toDay.add(new Duration(days: global.testDay));
+      try {
+        localDb.save(Campos.futureSuscription, futureSuscription.toString());
+      } catch (err) {}
+      //LANZAR LA MAIN NUEVAMENTE @@@@@@@@@@@@@@
+      //CORRECTO!
+    } else {
+      //toDay = DateTime.parse('2020-08-23 00:13:09.011293');
+
+      if (toDay.toString() == futureSuscription.toString()) {
+        //FIN DE SUSCRIPCION
+
+        //GUARDA PERIODO DE GRACIA SOLO SI NO EXISTE
+        await localDb.read(Campos.isActivatedSuscriptionFreeTime).then((data) {
+          try {
+            isActivatedSuscriptionFreeTime = data;
+            print('FUTURE SUSCRIPTION TIME:  ' +
+                isActivatedSuscriptionFreeTime.toString());
+          } catch (ex) {
+            print('ERROR 2' + ex.toString());
+          }
+        });
+        if (isActivatedSuscriptionFreeTime == null) {
+          isActivatedSuscriptionFreeTime = true;
+          var futureSuscription =
+              toDay.add(new Duration(days: global.testDayWait));
+          //GUARDA EL TIEMPO DE GRACIA
+          localDb.save(Campos.futureSuscription, futureSuscription.toString());
+          localDb.save(Campos.isActivatedSuscriptionFreeTime,
+              isActivatedSuscriptionFreeTime.toString());
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Suscription()),
+          );
+        } else {
+          global.isActivatedSuscriptionFreeTime = true;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Suscription()),
+          );
+          //LANZA LA VENTANA DE SUSCRIPCION SIN BOTON DE GRACIA
+        }
+
+        //futureSuscriptionFreeTime =
+      }
+    }
+  }
 
   _validateDate(context) async {
     int contTestDay = 0;
