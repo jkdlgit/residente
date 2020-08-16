@@ -15,6 +15,7 @@ import 'package:residente/screens/register2.dart';
 import 'package:residente/screens/suscriptionTankyou.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/utils/methos.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Suscription extends StatefulWidget {
   @override
@@ -111,11 +112,10 @@ class _SuscriptionState extends State<Suscription> {
 
     purchaseUpdatedSubscription =
         FlutterInappPurchase.purchaseUpdated.listen((productItem) {
+      global.isSuscribed = false;
       if (productItem.productId == global.suscriptionName) {
         global.isSuscribed = true;
         _continuar(context);
-      } else {
-        global.isSuscribed = false;
       }
       //print('purchase-updated: $productItem');
     });
@@ -124,11 +124,10 @@ class _SuscriptionState extends State<Suscription> {
         FlutterInappPurchase.purchaseError.listen((purchaseError) {
       //purchaseError.responseCode:7 significa que el producto o suscripcion
       //ya fue adquirid@
+      global.isSuscribed = false;
       if (purchaseError.responseCode == 7) {
         global.isSuscribed = true;
         _continuar(context);
-      } else {
-        global.isSuscribed = false;
       }
       //print('purchase-error: $purchaseError');
     });
@@ -433,14 +432,13 @@ NECESITE TERMINAR EL REGISTRO, DESPUES DE UN TIEMPO VOLVER A SUGERIRLE QUE SE SU
           global.setMoreTimeSuscription = true;
           localDb.save(
               Campos.setMoreTimeSuscription, global.testDayWait.toString());
+          await _mostrarPopUp(context, false);
         } catch (ex) {}
       }
     } catch (err) {
       int i = 0;
     }
     //verificar si se lanza main
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MainHome()));
   }
 /*
   Future _getPurchasesSuscription() async {
@@ -532,5 +530,55 @@ NECESITE TERMINAR EL REGISTRO, DESPUES DE UN TIEMPO VOLVER A SUGERIRLE QUE SE SU
       context,
       MaterialPageRoute(builder: (context) => SuscriptionTankyou()),
     );
+  }
+
+  _mostrarPopUp(context, estadoEnvio) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.fromTop,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: MyColors.sapphire,
+      ),
+    );
+    return Alert(
+      style: alertStyle,
+      context: context,
+      //type: AlertType.success,
+      title: "Excelente! puedes seguir usando Alert durante 3 dias.",
+      buttons: [
+        /*  DialogButton(
+          child: Text(
+            (estadoEnvio) ? "Inicio" : "Reintentar",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            );
+          },
+          color: (estadoEnvio) ? MyColors.sapphire : Colors.red,
+        ),*/
+        DialogButton(
+            child: Text(
+              "Listo",
+              style: TextStyle(color: MyColors.sapphire, fontSize: 20),
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MainHome()));
+            },
+            color: MyColors.sapphire)
+      ],
+    ).show();
   }
 }

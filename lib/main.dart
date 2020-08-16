@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/screens/noConnection.dart';
@@ -25,6 +29,19 @@ void main() {
 }
 
 final localDb = LocalDataBase();
+final List<String> _suscriptionLists = Platform.isAndroid
+    ? [
+        'android.test.purchased',
+        'point_1000',
+        '5000_point',
+        'android.test.canceled',
+        'pluma_test',
+        'tv',
+        'telefono',
+        'internet',
+      ]
+    : ['com.cooni.point1000', 'com.cooni.point5000'];
+
 Residente residente = new Residente();
 
 class MyApp extends StatelessWidget {
@@ -41,14 +58,67 @@ class MyApp extends StatelessWidget {
   }
 }
 
+_initInappPurchase(context) async {
+  try {
+    await FlutterInappPurchase.instance.initConnection;
+    //print("---------- Connect Billing Button Pressed");
+
+  } catch (e) {
+    //Error
+  }
+}
+
+Future<void> initPlatformState() async {
+  String platformVersion;
+  // Platform messages may fail, so we use a try/catch PlatformException.
+  try {
+    platformVersion = await FlutterInappPurchase.instance.platformVersion;
+  } on PlatformException {
+    platformVersion = 'Failed to get platform version.';
+  }
+
+  // prepare
+  var result = await FlutterInappPurchase.instance.initConnection;
+  //print('result: $result');
+
+  // If the widget was removed from the tree while the asynchronous platform
+  // message was in flight, we want to discard the reply rather than calling
+  // setState to update our non-existent appearance.
+
+  /* setState(() {
+      platformVersion = platformVersion;
+    });*/
+
+  // refresh items for android
+  try {
+    String msg = await FlutterInappPurchase.instance.consumeAllItems;
+    //print('consumeAllItems: $msg');
+  } catch (err) {
+    //ingresa aqui cuando no encuentra productos o suscripciones
+    //print('consumeAllItems error: $err');
+  }
+
+  conectionSubscription =
+      FlutterInappPurchase.connectionUpdated.listen((connected) {
+    //print('connected: $connected');
+  });
+}
+
 class MainHome extends StatelessWidget {
   _testConnection(context) async {
     //_initPlatformState();
+    await _temp();
+    /*initPlatformState();
+    _initInappPurchase(context);
+    _getPurchasesSuscription();*/
 
     var today = DateTime.now();
     var fiftyDaysFromNow = today.add(new Duration(days: 2));
     global.endTryDay = false;
-    _validateDate1(context);
+
+    if (!global.isSuscribed) {
+      _validateDate1(context);
+    }
 
     var hasConnection = await DataConnectionChecker().hasConnection;
 
@@ -59,6 +129,64 @@ class MainHome extends StatelessWidget {
     } else {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => NoConnection()));
+    }
+  }
+
+  _temp() async {
+    //1
+    try {
+      await FlutterInappPurchase.instance.initConnection;
+      //print("---------- Connect Billing Button Pressed");
+
+    } catch (e) {
+      //Error
+    }
+
+//2
+
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await FlutterInappPurchase.instance.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // prepare
+    var result = await FlutterInappPurchase.instance.initConnection;
+    //print('result: $result');
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+
+    /* setState(() {
+      platformVersion = platformVersion;
+    });*/
+
+    // refresh items for android
+    try {
+      String msg = await FlutterInappPurchase.instance.consumeAllItems;
+      //print('consumeAllItems: $msg');
+    } catch (err) {
+      //ingresa aqui cuando no encuentra productos o suscripciones
+      //print('consumeAllItems error: $err');
+    }
+
+    conectionSubscription =
+        FlutterInappPurchase.connectionUpdated.listen((connected) {
+      //print('connected: $connected');
+    });
+//3
+    String productId = "";
+    List<PurchasedItem> items =
+        await FlutterInappPurchase.instance.getAvailablePurchases();
+    global.isSuscribed = false;
+    if (items.length > 0) {
+      productId = items[0].productId;
+      if (productId == global.suscriptionName) {
+        global.isSuscribed = true;
+      }
     }
   }
 
@@ -150,6 +278,11 @@ class MainHome extends StatelessWidget {
     //_updateCurrentTime();
   }*/
 
+/*AQUI ES NECESARIO VALIDAR PRIMERAMENTE SI EXISTE UNA SUSCRIPCION
+SI ES ASI, NO SE DEBE EJECUTAR ESTE METODO
+SI NO EXISTE, PERO EL USUAIOR GENERA UNA SUSCRIPCION, SE DEBE VALIDAR CORRECTAMENTE 
+Y DAR PASO INMEDIATAMENTE*/
+
   _validateDate1(context) async {
     //localDb.save(Campos.futureSuscription, null);
     //localDb.save(Campos.isActivatedSuscriptionFreeTime, null);
@@ -179,7 +312,7 @@ class MainHome extends StatelessWidget {
       //LANZAR LA MAIN NUEVAMENTE @@@@@@@@@@@@@@
       //CORRECTO!
     } else {
-      //toDay = DateTime.parse('2020-08-23 00:13:09.011293');
+      toDay = '2020-08-22';
 
       if (toDay == futureSuscription.toString()) {
         //FIN DE SUSCRIPCION
@@ -196,8 +329,9 @@ class MainHome extends StatelessWidget {
         });
         if (isActivatedSuscriptionFreeTime == null) {
           isActivatedSuscriptionFreeTime = true;
+          var dtToDay = DateTime.parse(toDay);
           var futureSuscription =
-              toDayTime.add(new Duration(days: global.testDayWait));
+              dtToDay.add(new Duration(days: global.testDayWait));
           String futureSuscriptionString =
               DateFormat('yyyy-MM-dd').format(futureSuscription);
           //GUARDA EL TIEMPO DE GRACIA
@@ -289,4 +423,34 @@ class MainHome extends StatelessWidget {
 
     print('>' + now.toString() + '<');
   }*/
+/*
+  Future _getSuscription() async {
+    try {
+      List<IAPItem> items = await FlutterInappPurchase.instance
+          .getSubscriptions(_suscriptionLists);
+      List<IAPItem> _itemsSuscription = [];
+
+      _itemsSuscription = items;
+      //this._purchases = [];
+
+    } catch (err) {}
+    /*  for (var item in items) {
+      //print('${item.toString()}');
+      this._items.add(item);
+    }*/
+   
+  }*/
+
+  Future _getPurchasesSuscription() async {
+    String productId = "";
+    List<PurchasedItem> items =
+        await FlutterInappPurchase.instance.getAvailablePurchases();
+    global.isSuscribed = false;
+    if (items.length > 0) {
+      productId = items[0].productId;
+      if (productId == global.suscriptionName) {
+        global.isSuscribed = true;
+      }
+    }
+  }
 }
