@@ -108,6 +108,7 @@ class MainHome extends StatelessWidget {
   _testConnection(context) async {
     //_initPlatformState();
     await _temp();
+
     /*initPlatformState();
     _initInappPurchase(context);
     _getPurchasesSuscription();*/
@@ -231,7 +232,7 @@ class MainHome extends StatelessWidget {
           }
         },
       );
-    } catch (e) {}
+    } catch (err) {}
   }
 
   _getData() {
