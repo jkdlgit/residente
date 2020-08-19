@@ -1,12 +1,11 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:residente/models/residente.dart';
+import 'package:residente/models/residenteModel.dart';
 
-class Methods {
-
+class MetodosGenerales {
   //POPUP DE ESPERA
-  static getPopUp(context) {
+  static obtenerPopUp(context) {
     ProgressDialog p = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
 
@@ -27,8 +26,7 @@ class Methods {
     return p;
   }
 
-  
-  static getMessage(String _mensaje, context) {
+  static obtenerMensaje(String _mensaje, context) {
     return Flushbar(
       flushbarPosition: FlushbarPosition.TOP,
       flushbarStyle: FlushbarStyle.GROUNDED,
@@ -45,7 +43,7 @@ class Methods {
     )..show(context);
   }
 
-  static bool inputsCorrect(_name,_lastName,address) {
+  static bool camposCorrectos(_name, _lastName, address) {
     String name = _name.trim();
     String lasName = _lastName.trim();
     String addres = address.trim();
@@ -56,16 +54,12 @@ class Methods {
     }
   }
 
-  static bool alertCodeValidate(code)
-  {
-    if(code!= null)
-    {
-      if(int.parse(code)>0)
-      {
+  static bool validarCodigoAlerta(code) {
+    if (code != null) {
+      if (int.parse(code) > 0) {
         return true;
       }
     }
     return false;
   }
-
 }

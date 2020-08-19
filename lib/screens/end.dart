@@ -3,29 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:residente/library/variables_globales.dart' as global;
-import 'package:residente/models/residente.dart';
+import 'package:residente/models/residenteModel.dart';
 import 'dart:async';
-import 'package:residente/screens/home.dart';
-import 'package:residente/utils/methos.dart';
+import 'package:residente/screens/InicioScreen.dart';
+import 'package:residente/utils/metodosGenerales.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class End extends StatefulWidget {
+class Fin extends StatefulWidget {
   @override
-  _EndState createState() => _EndState();
+  _FinState createState() => _FinState();
 }
 
-final db = Firestore.instance;
+final fireStore = Firestore.instance;
 bool alertaEnviada = false;
-bool datosEnvioCorrectos = false;
+bool datosEnvioCorrecto = false;
 
-class _EndState extends State<End> {
+class _FinState extends State<Fin> {
   Timer _timer;
   int _start = 10;
   @override
   void initState() {
     super.initState();
     alertaEnviada = false;
-    startTimer();
+    iniciarReloj();
   }
 
   @override
@@ -136,8 +136,8 @@ class _EndState extends State<End> {
                   onPressed: () {
                     if (!alertaEnviada) {
                       (_timer != null) ? _timer.cancel() : SizedBox.shrink();
-                      createData();
-                      if (datosEnvioCorrectos) {
+                      crearDatosAlertaFireStore();
+                      if (datosEnvioCorrecto) {
                         _mostrarPopUp(context, true);
                         alertaEnviada = true;
                       } else {
@@ -169,7 +169,7 @@ class _EndState extends State<End> {
     );
   }
 
-  void startTimer() {
+  void iniciarReloj() {
     const oneSec = const Duration(seconds: 1);
     _timer = new Timer.periodic(
       oneSec,
@@ -186,10 +186,10 @@ class _EndState extends State<End> {
     );
   }
 
-  createData() async {
-    if (Methods.alertCodeValidate(global.usAlerta.codigo)) {
-      datosEnvioCorrectos = true;
-      DocumentReference ref = await db
+  crearDatosAlertaFireStore() async {
+    if (MetodosGenerales.validarCodigoAlerta(global.usAlerta.codigo)) {
+      datosEnvioCorrecto = true;
+      DocumentReference ref = await fireStore
           .collection(Coleccion.registro_garita)
           .document(global.residente.documentIdGarita)
           .collection(Coleccion.alerta)
@@ -204,7 +204,7 @@ class _EndState extends State<End> {
         },
       );
 
-      DocumentReference ref1 = await db
+      DocumentReference ref1 = await fireStore
           .collection(Coleccion.registro_residente)
           .document(global.residente.documentId)
           .collection(Coleccion.alerta)
@@ -218,11 +218,11 @@ class _EndState extends State<End> {
         },
       );
     } else {
-      datosEnvioCorrectos = false;
+      datosEnvioCorrecto = false;
     }
   }
 
-  _mostrarPopUp(context, estadoEnvio) {
+  _mostrarPopUp(context, _estadoEnvio) {
     var alertStyle = AlertStyle(
       animationType: AnimationType.fromTop,
       isCloseButton: false,
@@ -236,18 +236,18 @@ class _EndState extends State<End> {
         ),
       ),
       titleStyle: TextStyle(
-        color: (estadoEnvio) ? MyColors.sapphire : Colors.red,
+        color: (_estadoEnvio) ? MyColors.sapphire : Colors.red,
       ),
     );
     return Alert(
       style: alertStyle,
       context: context,
       type: AlertType.success,
-      title: (estadoEnvio) ? "ALERTA ENVIADA" : "ALERTNA NO ENVIADA",
+      title: (_estadoEnvio) ? "ALERTA ENVIADA" : "ALERTNA NO ENVIADA",
       buttons: [
         DialogButton(
           child: Text(
-            (estadoEnvio) ? "Inicio" : "Reintentar",
+            (_estadoEnvio) ? "Inicio" : "Reintentar",
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           onPressed: () {
@@ -256,7 +256,7 @@ class _EndState extends State<End> {
               MaterialPageRoute(builder: (context) => Home()),
             );
           },
-          color: (estadoEnvio) ? MyColors.sapphire : Colors.red,
+          color: (_estadoEnvio) ? MyColors.sapphire : Colors.red,
         ),
         DialogButton(
           child: Text(

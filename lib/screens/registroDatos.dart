@@ -2,24 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
-import 'package:residente/models/residente.dart';
-import 'package:residente/screens/home.dart';
+import 'package:residente/models/residenteModel.dart';
+import 'package:residente/screens/InicioScreen.dart';
 import 'package:residente/utils/localStorageDB.dart';
-import 'package:residente/utils/methos.dart';
+import 'package:residente/utils/metodosGenerales.dart';
 
-class Register2 extends StatefulWidget {
+class RegistroDatos extends StatefulWidget {
   @override
-  _Register1State createState() => _Register1State();
+  _RegistroDatosState createState() => _RegistroDatosState();
 }
 
-final db = Firestore.instance;
-final localDb = LocalDataBase();
-final myController = TextEditingController();
+final fireStore = Firestore.instance;
+final baseLocal = BaseDatosLocal();
+final controladorTexto = TextEditingController();
 
-class _Register1State extends State<Register2> {
-  final myControllerNombre = TextEditingController();
-  final myControllerFamilia = TextEditingController();
-  final myControllerDireccion = TextEditingController();
+class _RegistroDatosState extends State<RegistroDatos> {
+  final controladorTextoNombre = TextEditingController();
+  final controladorTextoFamilia = TextEditingController();
+  final controladorTextoDireccion = TextEditingController();
   ProgressDialog pr;
 
   @override
@@ -56,7 +56,7 @@ class _Register1State extends State<Register2> {
                     height: 10.0,
                   ),
                   Text(
-                    global.appName,
+                    global.nombreApp,
                     style: TextStyle(
                       color: MyColors.sapphire,
                       fontSize: TamanioTexto.logo,
@@ -104,7 +104,7 @@ class _Register1State extends State<Register2> {
                           color: MyColors.grey30,
                         ),
                         textAlignVertical: TextAlignVertical.center,
-                        controller: myControllerNombre,
+                        controller: controladorTextoNombre,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: MyColors.white,
@@ -141,7 +141,7 @@ class _Register1State extends State<Register2> {
                           color: MyColors.grey30,
                         ),
                         textAlignVertical: TextAlignVertical.center,
-                        controller: myControllerFamilia,
+                        controller: controladorTextoFamilia,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: MyColors.white,
@@ -178,7 +178,7 @@ class _Register1State extends State<Register2> {
                           color: MyColors.grey30,
                         ),
                         textAlignVertical: TextAlignVertical.center,
-                        controller: myControllerDireccion,
+                        controller: controladorTextoDireccion,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: MyColors.white,
@@ -217,7 +217,7 @@ class _Register1State extends State<Register2> {
                 child: FlatButton(
                   color: MyColors.sapphire,
                   onPressed: () {
-                    _registryVerification(context);
+                    generarRegistro(context);
                   },
                   child: Text(
                     'FINALIZAR',
@@ -239,59 +239,61 @@ class _Register1State extends State<Register2> {
     );
   }
 
-  _registryVerification(context) async {
+  generarRegistro(context) async {
     pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
     await pr.show();
 
     try {
-      if (Methods.inputsCorrect(myControllerNombre.text,
-          myControllerFamilia.text, myControllerDireccion.text)) {
+      if (MetodosGenerales.camposCorrectos(controladorTextoNombre.text,
+          controladorTextoFamilia.text, controladorTextoDireccion.text)) {
         if (global.residente != null) {
-          global.residente.nombre = myControllerNombre.text;
-          global.residente.familia = myControllerFamilia.text;
-          global.residente.direccion = myControllerDireccion.text;
+          global.residente.nombre = controladorTextoNombre.text;
+          global.residente.familia = controladorTextoFamilia.text;
+          global.residente.direccion = controladorTextoDireccion.text;
 
-          if (createData(Coleccion.registro_residente) != null) {
+          if (guardarDatosLocalYFirestore(Coleccion.registro_residente) !=
+              null) {
             pr.hide();
-            localDb.save(Campos.cod_garita, global.residente.codGarita);
-            localDb.save(Campos.cod_residente, global.residente.codResidente);
-            localDb.save(Campos.direccion, global.residente.direccion);
-            localDb.save(
+            baseLocal.guardar(Campos.cod_garita, global.residente.codGarita);
+            baseLocal.guardar(
+                Campos.cod_residente, global.residente.codResidente);
+            baseLocal.guardar(Campos.direccion, global.residente.direccion);
+            baseLocal.guardar(
                 Campos.document_id_garita, global.residente.documentIdGarita);
-            localDb.save(Campos.familia, global.residente.familia);
-            localDb.save(Campos.documentId, global.residente.documentId);
-            localDb.save(Campos.nombre, global.residente.nombre);
+            baseLocal.guardar(Campos.familia, global.residente.familia);
+            baseLocal.guardar(Campos.documentId, global.residente.documentId);
+            baseLocal.guardar(Campos.nombre, global.residente.nombre);
 
             _continuar(context);
           } else {
             pr.hide();
-            _showMessage('Error generando registro', context);
+            _mostrarMensaje('Error generando registro', context);
           }
         } else {
           pr.hide();
-          _showMessage('Error generando registro', context);
+          _mostrarMensaje('Error generando registro', context);
         }
       } else {
         pr.hide();
-        _showMessage('Uno de los campos esta vacio.', context);
+        _mostrarMensaje('Uno de los campos esta vacio.', context);
       }
     } catch (e) {
       pr.hide();
     }
   }
 
-  _showMessage(String _mensaje, context) {
+  _mostrarMensaje(String _mensaje, context) {
     setState(
       () {
         global.mensaje = _mensaje;
       },
     );
-    return Methods.getMessage(_mensaje, context);
+    return MetodosGenerales.obtenerMensaje(_mensaje, context);
   }
 
-  Future<bool> createData(String collection) async {
-    DocumentReference ref = await db.collection(collection).add({
+  Future<bool> guardarDatosLocalYFirestore(String collection) async {
+    DocumentReference ref = await fireStore.collection(collection).add({
       Campos.cod_garita: global.residente.codGarita,
       Campos.cod_residente: global.residente.codResidente,
       Campos.direccion: global.residente.direccion,
@@ -303,14 +305,19 @@ class _Register1State extends State<Register2> {
 
     if (ref.documentID != null) {
       global.residente.documentId = ref.documentID;
-      _guardarDb(collection, Campos.documentId, ref.documentID, ref.documentID);
+      await fireStore
+          .collection(collection)
+          .document(ref.documentID)
+          .updateData({Campos.documentId: ref.documentID});
 
-      localDb.save(Campos.document_id, ref.documentID);
-      localDb.save(Campos.nombre, global.residente.nombre);
-      localDb.save(
+      //_guardarDb(collection, Campos.documentId, ref.documentID, ref.documentID);
+
+      baseLocal.guardar(Campos.document_id, ref.documentID);
+      baseLocal.guardar(Campos.nombre, global.residente.nombre);
+      baseLocal.guardar(
           Campos.document_id_garita, global.residente.documentIdGarita);
-      localDb.save(Campos.familia, global.residente.familia);
-      localDb.save(Campos.direccion, global.residente.direccion);
+      baseLocal.guardar(Campos.familia, global.residente.familia);
+      baseLocal.guardar(Campos.direccion, global.residente.direccion);
 
       return true;
     } else {
@@ -318,13 +325,12 @@ class _Register1State extends State<Register2> {
     }
   }
 
-  _guardarDb(
-      String collection, String field, String value, String documentId) async {
-    await db
+  /*_guardarDb(String collection, String field, String value, String documentId) async {
+    await fireStore
         .collection(collection)
         .document(documentId)
         .updateData({field: value});
-  }
+  }*/
 
   _continuar(context) {
     Navigator.push(

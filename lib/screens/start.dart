@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:residente/models/residente.dart';
-import 'package:residente/screens/register1.dart';
+import 'package:residente/models/residenteModel.dart';
+import 'package:residente/screens/registroValidacionCodigo.dart';
 
 class Start extends StatelessWidget {
   @override
@@ -46,8 +46,8 @@ class Start extends StatelessWidget {
                       widthFactor: 0.3,
                       heightFactor: 0.3,
                       child: Container(
-                        child:
-                            Image(image: AssetImage("assets/images/campana.png")),
+                        child: Image(
+                            image: AssetImage("assets/images/campana.png")),
                       ),
                     ),
                   )
@@ -63,7 +63,8 @@ class Start extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Register1()),
+                      MaterialPageRoute(
+                          builder: (context) => RegistroValidacionCodigo()),
                     );
                   },
                   child: Text(

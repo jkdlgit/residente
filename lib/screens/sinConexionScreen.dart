@@ -3,16 +3,16 @@ import 'package:residente/library/variables_globales.dart' as global;
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/main.dart';
-import 'package:residente/models/residente.dart';
-import 'package:residente/utils/methos.dart';
+import 'package:residente/models/residenteModel.dart';
+import 'package:residente/utils/metodosGenerales.dart';
 
-class NoConnection extends StatefulWidget {
+class SinConexionScreen extends StatefulWidget {
   @override
-  _NoConnectionState createState() => _NoConnectionState();
+  _SinConexionScreenState createState() => _SinConexionScreenState();
 }
 
-class _NoConnectionState extends State<NoConnection> {
-  bool hasConnection = false;
+class _SinConexionScreenState extends State<SinConexionScreen> {
+  bool tieneConexion = false;
   ProgressDialog pr;
 
   @override
@@ -73,7 +73,7 @@ class _NoConnectionState extends State<NoConnection> {
                 child: FlatButton(
                   color: MyColors.sapphire,
                   onPressed: () {
-                    _testConnection(context);
+                    _probarConexion(context);
                   },
                   child: Text(
                     'REINTENTAR',
@@ -94,13 +94,13 @@ class _NoConnectionState extends State<NoConnection> {
     );
   }
 
-  _testConnection(context) async {
-    pr = Methods.getPopUp(context);
+  _probarConexion(context) async {
+    pr = MetodosGenerales.obtenerPopUp(context);
     await pr.show();
 
-    hasConnection = await DataConnectionChecker().hasConnection;
+    tieneConexion = await DataConnectionChecker().hasConnection;
 
-    if (hasConnection) {
+    if (tieneConexion) {
       pr.hide();
       Navigator.push(
         context,
@@ -108,14 +108,14 @@ class _NoConnectionState extends State<NoConnection> {
       );
     } else {
       pr.hide();
-      _showMessage("No tienes conexión a internet.", context);
+      _mostrarMensaje("No tienes conexión a internet.", context);
     }
   }
 
-  _showMessage(String _mensaje, context) {
+  _mostrarMensaje(String _mensaje, context) {
     setState(() {
       global.mensaje = _mensaje;
     });
-    return Methods.getMessage(_mensaje, context);
+    return MetodosGenerales.obtenerMensaje(_mensaje, context);
   }
 }

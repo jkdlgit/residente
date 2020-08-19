@@ -5,19 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
-import 'package:residente/models/residente.dart';
-import 'package:residente/screens/register2.dart';
-import 'package:residente/utils/methos.dart';
+import 'package:residente/models/residenteModel.dart';
+import 'package:residente/screens/registroDatos.dart';
+import 'package:residente/utils/metodosGenerales.dart';
 
-class Register1 extends StatefulWidget {
+class RegistroValidacionCodigo extends StatefulWidget {
   @override
-  _Register1State createState() => _Register1State();
+  _RegistroValidacionCodigoState createState() =>
+      _RegistroValidacionCodigoState();
 }
 
-final db = Firestore.instance;
+final fireStore = Firestore.instance;
 
-class _Register1State extends State<Register1> {
-  final myController = TextEditingController();
+class _RegistroValidacionCodigoState extends State<RegistroValidacionCodigo> {
+  final controladorText = TextEditingController();
   ProgressDialog pr;
 
   bool codeState = true;
@@ -98,7 +99,7 @@ class _Register1State extends State<Register1> {
                   height: 10.0,
                 ),
                 Text(
-                  global.appName,
+                  global.nombreApp,
                   style: TextStyle(
                     color: MyColors.sapphire,
                     fontSize: TamanioTexto.logo,
@@ -144,7 +145,7 @@ class _Register1State extends State<Register1> {
                       inputFormatters: <TextInputFormatter>[
                         WhitelistingTextInputFormatter.digitsOnly
                       ],
-                      controller: myController,
+                      controller: controladorText,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: MyColors.white,
@@ -185,7 +186,7 @@ class _Register1State extends State<Register1> {
                 child: FlatButton(
                   color: MyColors.sapphire,
                   onPressed: () {
-                    _registryVerification(context);
+                    _verificarGenerarGuardarCodigo(context);
                   },
                   child: Text(
                     'CONTINUAR',
@@ -207,14 +208,14 @@ class _Register1State extends State<Register1> {
     );
   }
 
-  _registryVerification(context) async {
-    pr = Methods.getPopUp(context);
+  _verificarGenerarGuardarCodigo(context) async {
+    pr = MetodosGenerales.obtenerPopUp(context);
     await pr.show();
     try {
-      if (myController.text.length > 0) {
-        var userQuery = db
+      if (controladorText.text.length > 0) {
+        var userQuery = fireStore
             .collection(Coleccion.registro_garita)
-            .where(Campos.cod_garita, isEqualTo: myController.text)
+            .where(Campos.cod_garita, isEqualTo: controladorText.text)
             .limit(1);
 
         userQuery.getDocuments().then((garita) {
@@ -227,10 +228,13 @@ class _Register1State extends State<Register1> {
                 : 0;
 
             if (generador != 0) {
-              _guardarDb(Coleccion.registro_garita, Campos.generador_residente,
-                  (generador + 1).toString(), documentIdGarita);
+              _guardarFireStore(
+                  Coleccion.registro_garita,
+                  Campos.generador_residente,
+                  (generador + 1).toString(),
+                  documentIdGarita);
 
-              Residente residente = new Residente();
+              ResidenteModel residente = new ResidenteModel();
               residente.codGarita = garitaSnap['cod_garita'];
               residente.codResidente = generador.toString();
               residente.documentIdGarita = documentIdGarita;
@@ -240,43 +244,43 @@ class _Register1State extends State<Register1> {
               _continuar(context);
             } else {
               pr.hide();
-              _showMessage(
+              _mostratMensaje(
                   'Error generando registro, por favor vuela a intentarlo.',
                   context);
             }
           } else {
             pr.hide();
-            _showMessage('El código no existe.', context);
+            _mostratMensaje('El código no existe.', context);
           }
         });
       } else {
         pr.hide();
-        _showMessage('El campo esta vacio.', context);
+        _mostratMensaje('El campo esta vacio.', context);
       }
     } catch (e) {
       pr.hide();
     }
   }
 
-  _guardarDb(
+  _guardarFireStore(
       String collection, String field, String value, String documentId) async {
-    await db
+    await fireStore
         .collection(collection)
         .document(documentId)
         .updateData({field: value});
   }
 
-  _showMessage(String _mensaje, context) {
+  _mostratMensaje(String _mensaje, context) {
     setState(() {
       global.mensaje = _mensaje;
     });
-    return Methods.getMessage(_mensaje, context);
+    return MetodosGenerales.obtenerMensaje(_mensaje, context);
   }
 
   _continuar(context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Register2()),
+      MaterialPageRoute(builder: (context) => RegistroDatos()),
     );
   }
 }

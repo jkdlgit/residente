@@ -4,43 +4,43 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:residente/models/residente.dart';
-import 'package:residente/models/times.dart';
+import 'package:residente/models/residenteModel.dart';
+import 'package:residente/models/tiempoAlerta.dart';
 import 'package:residente/library/variables_globales.dart' as global;
-import 'package:residente/models/types.dart';
+import 'package:residente/models/tipoAlerta.dart';
 import 'package:residente/screens/end.dart';
-import 'package:residente/screens/noConnection.dart';
+import 'package:residente/screens/sinConexionScreen.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 
 class Home extends StatefulWidget {
   final String title = "Alerta";
   @override
-  HomeState createState() => HomeState();
+  InicioScreen createState() => InicioScreen();
 }
 
-final db = Firestore.instance;
+final fireStore = Firestore.instance;
 ProgressDialog pr;
 
-class HomeState extends State<Home> {
+class InicioScreen extends State<Home> {
   int indexSelected = 1;
 
   @override
   void initState() {
     super.initState();
 
-    _testConnection(context);
+    _probarConexion(context);
     global.usAlerta.codigo = null;
-    _getAlertCode();
+    _obtenerCodigoAlerta();
   }
 
-  _testConnection(context) async {
+  _probarConexion(context) async {
     var hasConnection = await DataConnectionChecker().hasConnection;
 
     if (!hasConnection) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => NoConnection()),
+        MaterialPageRoute(builder: (context) => SinConexionScreen()),
       );
     }
   }
@@ -124,7 +124,7 @@ class HomeState extends State<Home> {
               child: ListView.builder(
                 padding: EdgeInsets.only(left: 10.0, top: 0.0),
                 scrollDirection: Axis.horizontal,
-                itemCount: times.length,
+                itemCount: tiempoAlertas.length,
                 itemBuilder: (BuildContext contex, int index) {
                   return Padding(
                     padding: EdgeInsets.all(8.0),
@@ -148,15 +148,15 @@ class HomeState extends State<Home> {
       color: MyColors.white_ligth,
       child: ListView.builder(
         scrollDirection: Axis.vertical,
-        itemCount: type.length,
+        itemCount: tipoAlerta.length,
         itemBuilder: (BuildContext context, int index) {
-          final String tipo = type[index].toString();
+          final String tipo = tipoAlerta[index].toString();
 
           return GestureDetector(
             onTap: () {
-              _setAlertData(null, type[index], null);
+              _cargarDatosMemoria(null, tipoAlerta[index], null);
               try {
-                _next(context);
+                _siguiente(context);
               } catch (e) {}
             },
             child: Card(
@@ -250,7 +250,7 @@ class HomeState extends State<Home> {
                 radius: 45.0,
                 backgroundColor: MyColors.moccasin,
                 child: Text(
-                  times[index].toString(),
+                  tiempoAlertas[index].toString(),
                   style: TextStyle(
                       fontSize: 40,
                       color: MyColors.sapphire,
@@ -263,13 +263,13 @@ class HomeState extends State<Home> {
                 setState(() {
                   indexSelected = index;
                 });
-                _setAlertData(null, null, times[index]);
+                _cargarDatosMemoria(null, null, tiempoAlertas[index]);
               },
               child: CircleAvatar(
                 radius: 30.0,
                 backgroundColor: MyColors.sapphire,
                 child: Text(
-                  times[index].toString(),
+                  tiempoAlertas[index].toString(),
                   style: TextStyle(fontSize: 30, color: MyColors.white),
                 ),
               ),
@@ -277,9 +277,9 @@ class HomeState extends State<Home> {
     );
   }
 
-  _getAlertCode() {
+  _obtenerCodigoAlerta() {
     if (global.usAlerta.codigo == null) {
-      DocumentReference userQuery = db
+      DocumentReference userQuery = fireStore
           .collection(Coleccion.registro_garita)
           .document(global.residente.documentIdGarita);
 
@@ -288,13 +288,13 @@ class HomeState extends State<Home> {
           if (garita != null) {
             String codigo = garita.data[Campos.generador_alerta];
 
-            _guardarDb(
+            _guardarFireStore(
                 Coleccion.registro_garita,
                 Campos.generador_alerta,
                 (int.parse(codigo) + 1).toString(),
                 global.residente.documentIdGarita);
 
-            _setAlertData(codigo, null, times[indexSelected]);
+            _cargarDatosMemoria(codigo, null, tiempoAlertas[indexSelected]);
           } else {
             _mostrarPopUp();
           }
@@ -303,7 +303,7 @@ class HomeState extends State<Home> {
     }
   }
 
-  _setAlertData(String _codigo, String _tipo, String _duracion) {
+  _cargarDatosMemoria(String _codigo, String _tipo, String _duracion) {
     try {
       global.usAlerta.codigo =
           (_codigo != null) ? _codigo : global.usAlerta.codigo;
@@ -313,20 +313,20 @@ class HomeState extends State<Home> {
     } catch (e) {}
   }
 
-  _next(context) {
+  _siguiente(context) {
     if (global.usAlerta.codigo != null) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => End()),
+        MaterialPageRoute(builder: (context) => Fin()),
       );
     } else {
-      startTimer();
+      iniciarReloj();
     }
   }
 
-  _guardarDb(
+  _guardarFireStore(
       String collection, String field, String value, String documentId) async {
-    await db
+    await fireStore
         .collection(collection)
         .document(documentId)
         .updateData({field: value});
@@ -362,7 +362,7 @@ class HomeState extends State<Home> {
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           onPressed: () {
-            _getAlertCode();
+            _obtenerCodigoAlerta();
           },
           color: MyColors.sapphire,
         ),
@@ -401,7 +401,7 @@ class HomeState extends State<Home> {
 
   int contWaitCode = 0;
   Timer _timer;
-  void startTimer() async {
+  void iniciarReloj() async {
     pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
     await pr.show();
@@ -418,7 +418,7 @@ class HomeState extends State<Home> {
 
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => End()),
+              MaterialPageRoute(builder: (context) => Fin()),
             );
           }
 

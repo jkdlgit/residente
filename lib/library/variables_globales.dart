@@ -1,9 +1,9 @@
 library garita.global;
 
-import 'package:residente/models/residente.dart';
+import 'package:residente/models/residenteModel.dart';
 
-Residente residente;
+ResidenteModel residente;
 String mensaje;
 UsAlerta usAlerta = new UsAlerta();
-String appName = "Alert Now";
+String nombreApp = "Alert Now";
 bool alertaCancelada = false;

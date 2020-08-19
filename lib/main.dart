@@ -1,16 +1,16 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
-import 'package:residente/screens/home.dart';
-import 'package:residente/screens/noConnection.dart';
+import 'package:residente/screens/InicioScreen.dart';
+import 'package:residente/screens/sinConexionScreen.dart';
 import 'package:residente/screens/start.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/library/variables_globales.dart' as global;
-import 'models/residente.dart';
+import 'models/residenteModel.dart';
 
 void main() => runApp(MyApp());
 
-final localDb = LocalDataBase();
-Residente residente = new Residente();
+final baseLocal = BaseDatosLocal();
+ResidenteModel residenteM = new ResidenteModel();
 
 class MyApp extends StatelessWidget {
   @override
@@ -26,20 +26,20 @@ class MyApp extends StatelessWidget {
 }
 
 class MainHome extends StatelessWidget {
-  _testConnection(context) async {
-    var hasConnection = await DataConnectionChecker().hasConnection;
+  _probarConexion(context) async {
+    var tieneConexion = await DataConnectionChecker().hasConnection;
 
-    if (hasConnection) {
-      _getStart(context);
+    if (tieneConexion) {
+      _iniciar(context);
     } else {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => NoConnection()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => SinConexionScreen()));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _testConnection(context);
+    _probarConexion(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.sapphire,
@@ -58,18 +58,18 @@ class MainHome extends StatelessWidget {
     );
   }
 
-  _getStart(context) {
+  _iniciar(context) {
     try {
-      localDb.read(Campos.cod_residente).then(
+      baseLocal.leer(Campos.cod_residente).then(
         (data) {
           if (data != null) {
-            residente.codResidente = data;
+            residenteM.codResidente = data;
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Home()),
             );
 
-            _getData();
+            _cargarDatosUsuario();
           } else {
             Navigator.push(
               context,
@@ -81,30 +81,30 @@ class MainHome extends StatelessWidget {
     } catch (e) {}
   }
 
-  _getData() {
-    localDb.read(Campos.document_id).then((data) {
-      residente.documentId = data;
-      global.residente = residente;
+  _cargarDatosUsuario() {
+    baseLocal.leer(Campos.document_id).then((data) {
+      residenteM.documentId = data;
+      global.residente = residenteM;
     });
 
-    localDb.read(Campos.nombre).then((data) {
-      residente.nombre = data;
-      global.residente = residente;
+    baseLocal.leer(Campos.nombre).then((data) {
+      residenteM.nombre = data;
+      global.residente = residenteM;
     });
 
-    localDb.read(Campos.document_id_garita).then((data) {
-      residente.documentIdGarita = data;
-      global.residente = residente;
+    baseLocal.leer(Campos.document_id_garita).then((data) {
+      residenteM.documentIdGarita = data;
+      global.residente = residenteM;
     });
 
-    localDb.read(Campos.familia).then((data) {
-      residente.familia = data;
-      global.residente = residente;
+    baseLocal.leer(Campos.familia).then((data) {
+      residenteM.familia = data;
+      global.residente = residenteM;
     });
 
-    localDb.read(Campos.direccion).then((data) {
-      residente.direccion = data;
-      global.residente = residente;
+    baseLocal.leer(Campos.direccion).then((data) {
+      residenteM.direccion = data;
+      global.residente = residenteM;
     });
   }
 }
