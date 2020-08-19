@@ -8,6 +8,8 @@ import 'package:progress_dialog/progress_dialog.dart';
 //import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
 import 'package:residente/screens/home.dart';
+
+import '../main.dart';
 //import 'package:residente/screens/register2.dart';
 //import 'package:residente/utils/methos.dart';
 
@@ -298,7 +300,7 @@ class _SuscriptionTankyouState extends State<SuscriptionTankyou> {
   _continuar(context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Home()),
+      MaterialPageRoute(builder: (context) => MainHome()),
     );
   }
 }

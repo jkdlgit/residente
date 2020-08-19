@@ -107,24 +107,38 @@ Future<void> initPlatformState() async {
 class MainHome extends StatelessWidget {
   _testConnection(context) async {
     //_initPlatformState();
-    await _temp();
+    await _iniciaFlutterInappPurchase();
 
     /*initPlatformState();
     _initInappPurchase(context);
     _getPurchasesSuscription();*/
 
-    var today = DateTime.now();
-    var fiftyDaysFromNow = today.add(new Duration(days: 2));
-    global.endTryDay = false;
+    //var today = DateTime.now();
+    //var fiftyDaysFromNow = today.add(new Duration(days: 2));
 
-    if (!global.isSuscribed) {
-      _validateDate1(context);
+    //VERIFICAR SI EXISTE LA PRIMERA PIEDRA
+    await _verificarPrimeraPiedra();
+    if (!Contenedor.primeraPiedra) {
+      await _guardarPrimeraPiedra();
+      await _generaPeriodoPrueba();
     }
+    //VERIFICAR SUSCRIPCION LOCALMENTE
+    await _verificarSuscripcionGoogle();
+
+    if (!Contenedor.suscripcionActiva) {
+      await _verificaCaducidad(context);
+    }
+
+    //global.endTryDay = false;
+
+    /*if (Contenedor.suscripcionActiva) {
+      _validateDate1(context);
+    }*/
 
     var hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      if (!global.endTryDay) {
+      if (!global.mostraPantallaSuscripcion) {
         _getStart(context);
       }
     } else {
@@ -133,7 +147,7 @@ class MainHome extends StatelessWidget {
     }
   }
 
-  _temp() async {
+  _iniciaFlutterInappPurchase() async {
     //1
     try {
       await FlutterInappPurchase.instance.initConnection;
@@ -453,5 +467,227 @@ Y DAR PASO INMEDIATAMENTE*/
         global.isSuscribed = true;
       }
     }
+  }
+
+  _verificarPrimeraPiedra() async {
+    try {
+      await localDb.read(Dato.primeraPiedra).then((data) {
+        try {
+          if (data != null) {
+            Contenedor.primeraPiedra =
+                (data.toLowerCase() == "true") ? true : false;
+          } else {
+            Contenedor.primeraPiedra = false;
+          }
+          print('Contenedor.app_instalada = ' +
+              Contenedor.primeraPiedra.toString());
+        } catch (ex) {
+          Contenedor.primeraPiedra = false;
+          print('ERROR _verificarPrimeraPiedra1  ' + ex.toString());
+        }
+      });
+    } catch (ex) {
+      Contenedor.primeraPiedra = false;
+      print('ERROR _verificarPrimeraPiedra2 ' + ex.toString());
+    }
+  }
+
+  _guardarPrimeraPiedra() async {
+    try {
+      localDb.save(Dato.primeraPiedra, "True");
+      print('Se guardo primera piedra');
+    } catch (ex) {
+      print('ERROR _guardarPrimeraPiedra ' + ex.toString());
+    }
+  }
+
+  _verificarSuscripcionLocal() async {
+    try {
+      await localDb.read(Dato.suscripcionActiva).then((data) {
+        try {
+          if (data != null) {
+            Contenedor.suscripcionActiva =
+                (data.toLowerCase() == "true") ? true : false;
+          } else {
+            Contenedor.suscripcionActiva = false;
+          }
+          print('Contenedor.suscripcionActiva = ' +
+              Contenedor.suscripcionActiva.toString());
+        } catch (ex) {
+          Contenedor.suscripcionActiva = false;
+          print('ERROR _verificarSuscripcionLocal1 ' + ex.toString());
+        }
+      });
+    } catch (ex) {
+      Contenedor.suscripcionActiva = false;
+      print('ERROR _verificarSuscripcionLocal2 ' + ex.toString());
+    }
+  }
+
+  _verificarSuscripcionGoogle() async {
+    try {
+      String productId = "";
+      List<PurchasedItem> items =
+          await FlutterInappPurchase.instance.getAvailablePurchases();
+      if (items.length > 0) {
+        productId = items[0].productId;
+        if (productId == Dato.nombreSuscripcion) {
+          Contenedor.suscripcionActiva = true;
+        }
+      }
+    } catch (ex) {
+      //Contenedor.suscripcionActiva dejar esto en true por si se genera algun error que no sea culpa del usuario, pueda usar la app
+      Contenedor.suscripcionActiva = true;
+      print('ERROR _verificarSuscripcionGoogle ' + ex.toString());
+    }
+  }
+
+  _guardaSuscripcionLocal() async {
+    try {
+      localDb.save(Dato.suscripcionActiva, "True");
+      print('Se guardo suscripcion activa');
+    } catch (ex) {
+      print('ERROR _guardaSuscripcionLocal ' + ex.toString());
+    }
+  }
+
+  _generaPeriodoPrueba() async {
+    try {
+      var fechaActual = DateTime.now();
+      //String fechaActualFormato = DateFormat('yyyy-MM-dd').format(fechaActual);
+
+      var fechaCaducidad =
+          fechaActual.add(new Duration(days: Contenedor.diasPrueba));
+
+      String fechaCaducidadFormato =
+          DateFormat('yyyy-MM-dd').format(fechaCaducidad);
+      try {
+        localDb.save(Dato.periodoPrueba, fechaCaducidadFormato);
+        localDb.save(Dato.periodoGraciaActivo, 'True');
+      } catch (err) {}
+      //LANZAR LA MAIN NUEVAMENTE @@@@@@@@@@@@@@
+      //CORRECTO!
+
+    } catch (ex) {}
+  }
+
+  _verificaCaducidad(context) async {
+    try {
+      var fechaActual = DateTime.now();
+      String fechaActualFormato = DateFormat('yyyy-MM-dd').format(fechaActual);
+
+      //CONSULTA SI ESTA ACTIVO EL PERIODO DE GRACIA
+      await _consultaPeriodoGraciaActivo(); //Dato.periodoGraciaActivo = True/False
+      /*Si el periodo de gracia esta activo, significa que 
+   se debera lanzar la ventana de suscripcion 
+   mostrando el boton de "Dame Mas Tiempo"*/
+
+      await _consultaPeriodoPrueba(); //Dato.periodoPrueba = 2020-08-26
+
+      await _consultarEstadoCaducado();
+
+      DateTime dtFechaActual = DateTime.parse(fechaActualFormato);
+      DateTime dtPeriodoPruena = DateTime.parse(Contenedor.periodoPrueba);
+
+      /*if (dtFechaActual.isAtSameMomentAs(dtPeriodoPruena) ||
+          dtPeriodoPruena.isBefore(dtFechaActual)) {
+        int p = 0;
+        int g = 0;
+      }*/
+
+      if (dtFechaActual.isAtSameMomentAs(dtPeriodoPruena) ||
+          dtPeriodoPruena.isBefore(dtFechaActual) ||
+          (Contenedor.estadoCaducado)) {
+        //if (Contenedor.periodoGraciaActivo) {
+        //var dtToDay = DateTime.parse(toDay);
+        if (Contenedor.periodoGraciaActivo) {
+          var fechaCaducidad =
+              fechaActual.add(new Duration(days: Contenedor.diasGracia));
+          String fechaCaducidadFormato =
+              DateFormat('yyyy-MM-dd').format(fechaCaducidad);
+          //GUARDA EL TIEMPO DE GRACIA
+          localDb.save(Dato.periodoPrueba, fechaCaducidadFormato);
+          Contenedor.periodoPrueba = fechaCaducidadFormato;
+          //localDb.save(Dato.periodoGraciaActivo, 'False');
+        }
+
+        localDb.save(Dato.estadoCaducado, 'True');
+        global.mostraPantallaSuscripcion = true;
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Suscription()),
+        );
+        //}
+      } else {
+        //CONTINUAR A LA PANTALLA HOME
+      }
+    } catch (ex) {
+      print('ERROR _consultaPeriodoPrueba ' + ex.toString());
+    }
+  }
+
+//&&&& se necesita que en la primera este true
+  _consultaPeriodoGraciaActivo() async {
+    try {
+      await localDb.read(Dato.periodoGraciaActivo).then((data) {
+        try {
+          if (data != null) {
+            Contenedor.periodoGraciaActivo =
+                (data.toLowerCase() == "true") ? true : false;
+          } else {
+            Contenedor.periodoGraciaActivo = true;
+          }
+          print('Contenedor.periodoGraciaActivo = ' +
+              Contenedor.periodoGraciaActivo.toString());
+        } catch (ex) {
+          Contenedor.periodoGraciaActivo = true;
+          print('ERROR _consultaPeriodoGraciaActivo1 ' + ex.toString());
+        }
+      });
+    } catch (ex) {
+      Contenedor.periodoGraciaActivo = true;
+      print('ERROR _consultaPeriodoGraciaActivo2 ' + ex.toString());
+    }
+  }
+
+  _consultaPeriodoPrueba() async {
+    try {
+      await localDb.read(Dato.periodoPrueba).then((data) {
+        try {
+          if (data != null) {
+            Contenedor.periodoPrueba = data;
+          } else {
+            Contenedor.periodoPrueba = null;
+          }
+          print('Contenedor.periodoPrueba = ' + Contenedor.periodoPrueba);
+        } catch (ex) {
+          Contenedor.periodoPrueba = null;
+          print('ERROR _consultaPeriodoPrueba1 ' + ex.toString());
+        }
+      });
+    } catch (ex) {
+      Contenedor.periodoPrueba = null;
+      print('ERROR _consultaPeriodoPrueba2 ' + ex.toString());
+    }
+  }
+
+  _consultarEstadoCaducado() async {
+    try {
+      await localDb.read(Dato.estadoCaducado).then((data) {
+        try {
+          if (data != null) {
+            Contenedor.estadoCaducado =
+                (data.toLowerCase() == 'true') ? true : false;
+          } else {
+            Contenedor.estadoCaducado = false;
+          }
+          print('Contenedor.estadoCaducado = ' +
+              Contenedor.estadoCaducado.toString());
+        } catch (ex) {
+          Contenedor.periodoPrueba = null;
+          print('ERROR estadoCaducado1 ' + ex.toString());
+        }
+      });
+    } catch (ex) {}
   }
 }

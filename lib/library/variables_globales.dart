@@ -16,3 +16,4 @@ int testDayWait = 3;
                         EL USUARIO*/
 bool isActivatedSuscriptionFreeTime = false;
 bool endTryDay = false;
+bool mostraPantallaSuscripcion = false;

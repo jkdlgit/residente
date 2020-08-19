@@ -21,6 +21,25 @@ class Residente {
       this.documentIdGarita});
 }
 
+class Dato {
+  static String primeraPiedra = "primera_piedra";
+  static String suscripcionActiva = "suscripcion_activa";
+  static String nombreSuscripcion = "telefono";
+  static String periodoPrueba = 'fecha_caducidad';
+  static String periodoGraciaActivo = 'periodo_gracia';
+  static String estadoCaducado = 'estado_caducado';
+}
+
+class Contenedor {
+  static bool primeraPiedra = false;
+  static bool suscripcionActiva = false;
+  static String periodoPrueba = "";
+  static int diasPrueba = 7;
+  static bool periodoGraciaActivo = false;
+  static int diasGracia = 3;
+  static bool estadoCaducado = false;
+}
+
 class Campos {
   static String cod_garita = 'cod_garita';
   static String cod_residente = 'cod_residente';

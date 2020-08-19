@@ -112,9 +112,13 @@ class _SuscriptionState extends State<Suscription> {
 
     purchaseUpdatedSubscription =
         FlutterInappPurchase.purchaseUpdated.listen((productItem) {
-      global.isSuscribed = false;
+      Contenedor.suscripcionActiva = false;
+      //global.isSuscribed = false;
       if (productItem.productId == global.suscriptionName) {
-        global.isSuscribed = true;
+        //global.isSuscribed = true;
+        Contenedor.suscripcionActiva = true;
+        localDb.save(Dato.estadoCaducado, 'Flase');
+        _guardarSuscripcionActiva();
         _continuar(context);
       }
       //print('purchase-updated: $productItem');
@@ -124,9 +128,14 @@ class _SuscriptionState extends State<Suscription> {
         FlutterInappPurchase.purchaseError.listen((purchaseError) {
       //purchaseError.responseCode:7 significa que el producto o suscripcion
       //ya fue adquirid@
-      global.isSuscribed = false;
+
+      Contenedor.suscripcionActiva = false;
+      //Codigo de error 7 significa que el producto ya ha sido comprado o ya se ha suscripto
       if (purchaseError.responseCode == 7) {
-        global.isSuscribed = true;
+        //global.isSuscribed = true;
+        Contenedor.suscripcionActiva = true;
+        localDb.save(Dato.estadoCaducado, 'Flase');
+        _guardarSuscripcionActiva();
         _continuar(context);
       }
       //print('purchase-error: $purchaseError');
@@ -293,7 +302,7 @@ class _SuscriptionState extends State<Suscription> {
             ),
           ),
         ),
-        global.isActivatedSuscriptionFreeTime
+        !Contenedor.periodoGraciaActivo
             ? SizedBox(
                 height: 0.0,
               )
@@ -420,6 +429,7 @@ NECESITE TERMINAR EL REGISTRO, DESPUES DE UN TIEMPO VOLVER A SUGERIRLE QUE SE SU
   //void _requestSubscription(IAPItem item) {
   void _requestSubscription(String productId) async {
     try {
+      global.mostraPantallaSuscripcion = false;
       await FlutterInappPurchase.instance
           .requestSubscription(global.suscriptionName);
     } catch (err) {}
@@ -427,14 +437,10 @@ NECESITE TERMINAR EL REGISTRO, DESPUES DE UN TIEMPO VOLVER A SUGERIRLE QUE SE SU
 
   _setMoreTimeToSuscription() async {
     try {
-      if (!global.setMoreTimeSuscription) {
-        try {
-          global.setMoreTimeSuscription = true;
-          localDb.save(
-              Campos.setMoreTimeSuscription, global.testDayWait.toString());
-          await _mostrarPopUp(context, false);
-        } catch (ex) {}
-      }
+      global.mostraPantallaSuscripcion = false;
+      localDb.save(Dato.estadoCaducado, 'False');
+      localDb.save(Dato.periodoGraciaActivo, 'False');
+      await _mostrarPopUp(context, false);
     } catch (err) {
       int i = 0;
     }
@@ -571,7 +577,7 @@ NECESITE TERMINAR EL REGISTRO, DESPUES DE UN TIEMPO VOLVER A SUGERIRLE QUE SE SU
         DialogButton(
             child: Text(
               "Listo",
-              style: TextStyle(color: MyColors.sapphire, fontSize: 20),
+              style: TextStyle(color: MyColors.white, fontSize: 20),
             ),
             onPressed: () {
               Navigator.push(
@@ -580,5 +586,14 @@ NECESITE TERMINAR EL REGISTRO, DESPUES DE UN TIEMPO VOLVER A SUGERIRLE QUE SE SU
             color: MyColors.sapphire)
       ],
     ).show();
+  }
+
+  _guardarSuscripcionActiva() async {
+    try {
+      localDb.save(Dato.suscripcionActiva, "True");
+      print('Se guardo suscripcion activa');
+    } catch (ex) {
+      print('ERROR _guardarSuscripcionActiva ' + ex.toString());
+    }
   }
 }
