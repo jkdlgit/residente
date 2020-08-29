@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "1093920862477",
-    "firebase_url": "https://ciudadela-pro.firebaseio.com",
-    "project_id": "ciudadela-pro",
-    "storage_bucket": "ciudadela-pro.appspot.com"
+    "project_number": "1068352490967",
+    "firebase_url": "https://desarrollo-ciudadela.firebaseio.com",
+    "project_id": "desarrollo-ciudadela",
+    "storage_bucket": "desarrollo-ciudadela.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1093920862477:android:8758cc22d694e747f28044",
+        "mobilesdk_app_id": "1:1068352490967:android:48c4d6ec2803a9c4fdcf92",
         "android_client_info": {
           "package_name": "com.alert.garita"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1093920862477-i51uapfpkls4tfl276s2e3eobgfu9f7t.apps.googleusercontent.com",
+          "client_id": "1068352490967-9p6nmqce7g9eba7phk4vqplirtdp6pg5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAY7TvE7pcl1EyIUe737ZkVKWDmsO4E3Ug"
+          "current_key": "AIzaSyBZXhwIbM73Fq8mU2lE673IxxPDCuloO8E"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1093920862477-i51uapfpkls4tfl276s2e3eobgfu9f7t.apps.googleusercontent.com",
+              "client_id": "1068352490967-9p6nmqce7g9eba7phk4vqplirtdp6pg5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -37,27 +37,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1093920862477:android:3fc0ffed401f2649f28044",
+        "mobilesdk_app_id": "1:1068352490967:android:b8790954c083f0e9fdcf92",
         "android_client_info": {
           "package_name": "com.alert.residente"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1093920862477-i51uapfpkls4tfl276s2e3eobgfu9f7t.apps.googleusercontent.com",
+          "client_id": "1068352490967-9p6nmqce7g9eba7phk4vqplirtdp6pg5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAY7TvE7pcl1EyIUe737ZkVKWDmsO4E3Ug"
+          "current_key": "AIzaSyBZXhwIbM73Fq8mU2lE673IxxPDCuloO8E"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1093920862477-i51uapfpkls4tfl276s2e3eobgfu9f7t.apps.googleusercontent.com",
+              "client_id": "1068352490967-9p6nmqce7g9eba7phk4vqplirtdp6pg5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

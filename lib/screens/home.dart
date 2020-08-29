@@ -288,6 +288,55 @@ class HomeState extends State<Home> {
           if (garita != null) {
             String codigo = garita.data[Campos.generador_alerta];
 
+            //valida que no supere el valor limite de codigo
+            try {
+              int temp_cod = int.parse(codigo);
+              if (temp_cod < global.valor_fin_defecto_generador_alerta) {
+                _guardarDb(
+                    Coleccion.registro_garita,
+                    Campos.generador_alerta,
+                    (int.parse(codigo) + 1).toString(),
+                    global.residente.documentIdGarita);
+              } else {
+                _guardarDb(
+                    Coleccion.registro_garita,
+                    Campos.generador_alerta,
+                    global.valor_inicio_defecto_generador_alerta,
+                    global.residente.documentIdGarita);
+              }
+              _setAlertData(codigo, null, times[indexSelected]);
+            } catch (ex) {
+//Notificar error
+              _mostrarPopUp();
+            }
+          } else {
+            /*el codigo "generador_alerta" esta vacio, en este caso se guardara 
+            un valor por defecto para que la app no deje de fucionar, adicionalmente
+            se lo reporta como un error*/
+            _guardarDb(
+                Coleccion.registro_garita,
+                Campos.generador_alerta,
+                global.valor_inicio_defecto_generador_alerta,
+                global.residente.documentIdGarita);
+
+            _mostrarPopUp();
+          }
+        },
+      );
+    }
+  }
+
+  _getAlertCode1() {
+    if (global.usAlerta.codigo == null) {
+      DocumentReference userQuery = db
+          .collection(Coleccion.registro_garita)
+          .document(global.residente.documentIdGarita);
+
+      userQuery.get().then(
+        (garita) {
+          if (garita != null) {
+            String codigo = garita.data[Campos.generador_alerta];
+
             _guardarDb(
                 Coleccion.registro_garita,
                 Campos.generador_alerta,
