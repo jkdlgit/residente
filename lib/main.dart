@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/screens/noConnection.dart';
 import 'package:residente/screens/start.dart';
+import 'package:residente/screens/versionInactiva.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'models/residente.dart';
@@ -11,6 +13,7 @@ void main() => runApp(MyApp());
 
 final localDb = LocalDataBase();
 Residente residente = new Residente();
+final db = Firestore.instance;
 
 class MyApp extends StatelessWidget {
   @override
@@ -30,7 +33,14 @@ class MainHome extends StatelessWidget {
     var hasConnection = await DataConnectionChecker().hasConnection;
 
     if (hasConnection) {
-      _getStart(context);
+      bool ret = await _versionEstaActiva();
+      if (ret) {
+        _getStart(context);
+      }else
+      {
+        Navigator.push(
+          context, MaterialPageRoute(builder: (context) => VersionInactiva()));  
+      }
     } else {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => NoConnection()));
@@ -79,6 +89,29 @@ class MainHome extends StatelessWidget {
         },
       );
     } catch (e) {}
+  }
+
+  Future<bool> _versionEstaActiva() async {
+    try {
+      CollectionReference userQuery = db
+          .collection(Coleccion.configuracion)
+          .document('version_inactiva')
+          .collection('versiones');
+
+      QuerySnapshot qsna = await userQuery.getDocuments();
+
+      if (qsna.documents.length > 0) {
+        for (int i = 0; i < qsna.documents.length; i++) {
+          String v = qsna.documents[i]['version'];
+          if (qsna.documents[i]['version'] == global.mi_version) {
+            return false;
+          }
+        }
+        return true;
+      }
+    } catch (ex) {
+      int o = 0;
+    }
   }
 
   _getData() {
