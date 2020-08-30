@@ -7,6 +7,7 @@ import 'package:residente/screens/start.dart';
 import 'package:residente/screens/versionInactiva.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/library/variables_globales.dart' as global;
+import 'package:residente/utils/methos.dart';
 import 'models/residente.dart';
 
 void main() => runApp(MyApp());
@@ -36,10 +37,9 @@ class MainHome extends StatelessWidget {
       bool ret = await _versionEstaActiva();
       if (ret) {
         _getStart(context);
-      }else
-      {
-        Navigator.push(
-          context, MaterialPageRoute(builder: (context) => VersionInactiva()));  
+      } else {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => VersionInactiva()));
       }
     } else {
       Navigator.push(
@@ -49,6 +49,7 @@ class MainHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Methods.guardarLogCloudStore('main', 'build', 'tercer error');
     _testConnection(context);
     return Scaffold(
       appBar: AppBar(
@@ -88,7 +89,9 @@ class MainHome extends StatelessWidget {
           }
         },
       );
-    } catch (e) {}
+    } catch (ex) {
+      Methods.guardarLogCloudStore('main', '_getStart', ex.toString());
+    }
   }
 
   Future<bool> _versionEstaActiva() async {
@@ -110,7 +113,7 @@ class MainHome extends StatelessWidget {
         return true;
       }
     } catch (ex) {
-      int o = 0;
+      Methods.guardarLogCloudStore('main', '_versionEstaActiva', ex.toString());
     }
   }
 

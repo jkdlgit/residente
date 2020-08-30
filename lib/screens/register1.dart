@@ -253,8 +253,10 @@ class _Register1State extends State<Register1> {
         pr.hide();
         _showMessage('El campo esta vacio.', context);
       }
-    } catch (e) {
+    } catch (ex) {
       pr.hide();
+      Methods.guardarLogCloudStore(
+          'register1', '_registryVerification', ex.toString());
     }
   }
 

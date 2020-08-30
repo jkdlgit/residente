@@ -1,3 +1,4 @@
+import 'package:residente/utils/methos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalDataBase {
@@ -6,8 +7,10 @@ class LocalDataBase {
     String value = null;
     try {
       value = prefs.getString(_keyName.toUpperCase()) ?? null;
-    } catch (e) {
+    } catch (ex) {
       value = null;
+      Methods.guardarLogCloudStore(
+          'localStorageDB', 'LocalDataBase', ex.toString());
     }
     print('read: $value');
     return value;
