@@ -13,6 +13,8 @@ import 'package:residente/screens/noConnection.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 
+import '../main.dart';
+
 class Home extends StatefulWidget {
   final String title = "Alerta";
   @override
@@ -308,6 +310,11 @@ class HomeState extends State<Home> {
             } catch (ex) {
 //Notificar error
               _mostrarPopUp();
+              _guardarDb(
+                  Coleccion.registro_garita,
+                  Campos.generador_alerta,
+                  global.valor_inicio_defecto_generador_alerta,
+                  global.residente.documentIdGarita);
             }
           } else {
             /*el codigo "generador_alerta" esta vacio, en este caso se guardara 
@@ -412,6 +419,10 @@ class HomeState extends State<Home> {
           ),
           onPressed: () {
             _getAlertCode();
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MainHome()),
+            );
           },
           color: MyColors.sapphire,
         ),
