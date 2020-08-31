@@ -34,7 +34,7 @@ class MainHome extends StatelessWidget {
     var hasConnection = await DataConnectionChecker().hasConnection;
 
     _gestionarEstadoVersion();
-    print('>>>>>>>>>>>>>>>>>>>>>> A LA ESPERA DE FINALIZACION');
+    //print('>>>>>>>>>>>>>>>>>>>>>> A LA ESPERA DE FINALIZACION');
 
     if (hasConnection) {
       bool ret = await _versionEstaActiva();
@@ -110,7 +110,7 @@ class MainHome extends StatelessWidget {
     } catch (ex) {
       Methods.guardarLogCloudStore('main', '_versionEstaActiva', ex.toString());
     }
-    print('>>>>>>>>>>>>>>>>>>>>>> ESTADO LOCAL DE VERSION:  ' + ret.toString());
+    //print('>>>>>>>>>>>>>>>>>>>>>> ESTADO LOCAL DE VERSION:  ' + ret.toString());
 
     return ret;
   }
@@ -125,7 +125,7 @@ class MainHome extends StatelessWidget {
 
       QuerySnapshot qsna = await userQuery.getDocuments();
 
-      print('>>>>>>>>>>>>>>>>>>>>>>FINALIZO EL METODO DE GESTION DE VERSION');
+      //print('>>>>>>>>>>>>>>>>>>>>>>FINALIZO EL METODO DE GESTION DE VERSION');
 
       if (qsna.documents.length > 0) {
         for (int i = 0; i < qsna.documents.length; i++) {
@@ -137,14 +137,8 @@ class MainHome extends StatelessWidget {
         //state = true;
       }
     } catch (ex) {
-      return true;
       Methods.guardarLogCloudStore('main', '_versionEstaActiva', ex.toString());
-      state = true;
     }
-    print(
-        '>>>>>>>>>>>>>>>>>>>>>>FINALIZO EL METODO DE GESTION DE VERSION Y TIENE :  ' +
-            state.toString());
-
     localDb.save(Campos.estado_version, state.toString());
   }
 
