@@ -15,6 +15,7 @@ buildscript {
 
 allprojects {
     repositories {
+        
         google() 
         jcenter()
     }
@@ -27,6 +28,7 @@ subprojects {
 subprojects {
     project.evaluationDependsOn(':app')
 }
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

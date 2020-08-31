@@ -10,8 +10,11 @@ import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/types.dart';
 import 'package:residente/screens/end.dart';
 import 'package:residente/screens/noConnection.dart';
+import 'package:residente/utils/methos.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+
+import '../main.dart';
 
 class Home extends StatefulWidget {
   final String title = "Alerta";
@@ -157,7 +160,9 @@ class HomeState extends State<Home> {
               _setAlertData(null, type[index], null);
               try {
                 _next(context);
-              } catch (e) {}
+              } catch (ex) {
+                Methods.guardarLogCloudStore('home', '_cardInf', ex.toString());
+              }
             },
             child: Card(
               shape: RoundedRectangleBorder(
@@ -288,6 +293,62 @@ class HomeState extends State<Home> {
           if (garita != null) {
             String codigo = garita.data[Campos.generador_alerta];
 
+            //valida que no supere el valor limite de codigo
+            try {
+              int temp_cod = int.parse(codigo);
+              if (temp_cod < global.valor_fin_defecto_generador_alerta) {
+                _guardarDb(
+                    Coleccion.registro_garita,
+                    Campos.generador_alerta,
+                    (int.parse(codigo) + 1).toString(),
+                    global.residente.documentIdGarita);
+              } else {
+                _guardarDb(
+                    Coleccion.registro_garita,
+                    Campos.generador_alerta,
+                    global.valor_inicio_defecto_generador_alerta,
+                    global.residente.documentIdGarita);
+              }
+              _setAlertData(codigo, null, times[indexSelected]);
+            } catch (ex) {
+//Notificar error
+              _mostrarPopUp();
+              _guardarDb(
+                  Coleccion.registro_garita,
+                  Campos.generador_alerta,
+                  global.valor_inicio_defecto_generador_alerta,
+                  global.residente.documentIdGarita);
+              Methods.guardarLogCloudStore(
+                  'home', '_getAlertCode', ex.toString());
+            }
+          } else {
+            /*el codigo "generador_alerta" esta vacio, en este caso se guardara 
+            un valor por defecto para que la app no deje de fucionar, adicionalmente
+            se lo reporta como un error*/
+            _guardarDb(
+                Coleccion.registro_garita,
+                Campos.generador_alerta,
+                global.valor_inicio_defecto_generador_alerta,
+                global.residente.documentIdGarita);
+
+            _mostrarPopUp();
+          }
+        },
+      );
+    }
+  }
+
+  _getAlertCode1() {
+    if (global.usAlerta.codigo == null) {
+      DocumentReference userQuery = db
+          .collection(Coleccion.registro_garita)
+          .document(global.residente.documentIdGarita);
+
+      userQuery.get().then(
+        (garita) {
+          if (garita != null) {
+            String codigo = garita.data[Campos.generador_alerta];
+
             _guardarDb(
                 Coleccion.registro_garita,
                 Campos.generador_alerta,
@@ -310,7 +371,9 @@ class HomeState extends State<Home> {
       global.usAlerta.tipo = (_tipo != null) ? _tipo : global.usAlerta.tipo;
       global.usAlerta.duracion =
           (_duracion != null) ? _duracion : global.usAlerta.duracion;
-    } catch (e) {}
+    } catch (ex) {
+      Methods.guardarLogCloudStore('home', '_setAlertData', ex.toString());
+    }
   }
 
   _next(context) {
@@ -363,6 +426,10 @@ class HomeState extends State<Home> {
           ),
           onPressed: () {
             _getAlertCode();
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MainHome()),
+            );
           },
           color: MyColors.sapphire,
         ),

@@ -276,8 +276,10 @@ class _Register1State extends State<Register2> {
         pr.hide();
         _showMessage('Uno de los campos esta vacio.', context);
       }
-    } catch (e) {
+    } catch (ex) {
       pr.hide();
+      Methods.guardarLogCloudStore(
+          'register2', '_registryVerification', ex.toString());
     }
   }
 
@@ -291,30 +293,35 @@ class _Register1State extends State<Register2> {
   }
 
   Future<bool> createData(String collection) async {
-    DocumentReference ref = await db.collection(collection).add({
-      Campos.cod_garita: global.residente.codGarita,
-      Campos.cod_residente: global.residente.codResidente,
-      Campos.direccion: global.residente.direccion,
-      Campos.document_id_garita: global.residente.documentIdGarita,
-      Campos.familia: global.residente.familia,
-      Campos.documentId: global.residente.documentId,
-      Campos.nombre: global.residente.nombre
-    });
+    try {
+      DocumentReference ref = await db.collection(collection).add({
+        Campos.cod_garita: global.residente.codGarita,
+        Campos.cod_residente: global.residente.codResidente,
+        Campos.direccion: global.residente.direccion,
+        Campos.document_id_garita: global.residente.documentIdGarita,
+        Campos.familia: global.residente.familia,
+        Campos.documentId: global.residente.documentId,
+        Campos.nombre: global.residente.nombre
+      });
 
-    if (ref.documentID != null) {
-      global.residente.documentId = ref.documentID;
-      _guardarDb(collection, Campos.documentId, ref.documentID, ref.documentID);
+      if (ref.documentID != null) {
+        global.residente.documentId = ref.documentID;
+        _guardarDb(
+            collection, Campos.documentId, ref.documentID, ref.documentID);
 
-      localDb.save(Campos.document_id, ref.documentID);
-      localDb.save(Campos.nombre, global.residente.nombre);
-      localDb.save(
-          Campos.document_id_garita, global.residente.documentIdGarita);
-      localDb.save(Campos.familia, global.residente.familia);
-      localDb.save(Campos.direccion, global.residente.direccion);
+        localDb.save(Campos.document_id, ref.documentID);
+        localDb.save(Campos.nombre, global.residente.nombre);
+        localDb.save(
+            Campos.document_id_garita, global.residente.documentIdGarita);
+        localDb.save(Campos.familia, global.residente.familia);
+        localDb.save(Campos.direccion, global.residente.direccion);
 
-      return true;
-    } else {
-      return false;
+        return true;
+      } else {
+        return false;
+      }
+    } catch (ex) {
+      Methods.guardarLogCloudStore('register2', 'createData', ex.toString());
     }
   }
 
