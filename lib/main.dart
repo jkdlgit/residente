@@ -49,7 +49,6 @@ class MainHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Methods.guardarLogCloudStore('main', 'build', 'tercer error');
     _testConnection(context);
     return Scaffold(
       appBar: AppBar(
@@ -111,8 +110,11 @@ class MainHome extends StatelessWidget {
           }
         }
         return true;
+      } else {
+        return true;
       }
     } catch (ex) {
+      return true;
       Methods.guardarLogCloudStore('main', '_versionEstaActiva', ex.toString());
     }
   }
