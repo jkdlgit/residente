@@ -35,6 +35,7 @@ class Campos {
   static String tipo = 'tipo';
   static String duracion = 'duracion';
   static String document_id = 'document_id';
+  static String estado_version = 'estado_version';
 }
 
 class Coleccion {
