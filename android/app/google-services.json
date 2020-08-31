@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "880425005159",
-    "firebase_url": "https://ciudadela-pre.firebaseio.com",
-    "project_id": "ciudadela-pre",
-    "storage_bucket": "ciudadela-pre.appspot.com"
+    "project_number": "1093920862477",
+    "firebase_url": "https://ciudadela-pro.firebaseio.com",
+    "project_id": "ciudadela-pro",
+    "storage_bucket": "ciudadela-pro.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:880425005159:android:2712fede9fc4139f4f64c2",
+        "mobilesdk_app_id": "1:1093920862477:android:8758cc22d694e747f28044",
         "android_client_info": {
           "package_name": "com.alert.garita"
         }
       },
       "oauth_client": [
         {
-          "client_id": "880425005159-ofah9q9bektns68j54cmfo48fl7khq5u.apps.googleusercontent.com",
+          "client_id": "1093920862477-i51uapfpkls4tfl276s2e3eobgfu9f7t.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAyH21J8eqe7M_jQyfghYkvc9wvg3qY2C4"
+          "current_key": "AIzaSyAY7TvE7pcl1EyIUe737ZkVKWDmsO4E3Ug"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "880425005159-ofah9q9bektns68j54cmfo48fl7khq5u.apps.googleusercontent.com",
+              "client_id": "1093920862477-i51uapfpkls4tfl276s2e3eobgfu9f7t.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -37,27 +37,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:880425005159:android:979353f400e3b8c64f64c2",
+        "mobilesdk_app_id": "1:1093920862477:android:3fc0ffed401f2649f28044",
         "android_client_info": {
           "package_name": "com.alert.residente"
         }
       },
       "oauth_client": [
         {
-          "client_id": "880425005159-ofah9q9bektns68j54cmfo48fl7khq5u.apps.googleusercontent.com",
+          "client_id": "1093920862477-i51uapfpkls4tfl276s2e3eobgfu9f7t.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAyH21J8eqe7M_jQyfghYkvc9wvg3qY2C4"
+          "current_key": "AIzaSyAY7TvE7pcl1EyIUe737ZkVKWDmsO4E3Ug"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "880425005159-ofah9q9bektns68j54cmfo48fl7khq5u.apps.googleusercontent.com",
+              "client_id": "1093920862477-i51uapfpkls4tfl276s2e3eobgfu9f7t.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
