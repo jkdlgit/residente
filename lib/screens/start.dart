@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:residente/models/residente.dart';
+
 import 'package:residente/screens/register1.dart';
 
 class Start extends StatelessWidget {
@@ -20,13 +21,13 @@ class Start extends StatelessWidget {
             Expanded(
               child: Column(
                 children: <Widget>[
-                  Text(
+                  /*Text(
                     'Alert Now',
                     style: TextStyle(
                       color: MyColors.moccasin,
                       fontSize: 22.0,
                     ),
-                  ),
+                  ),*/
                   SizedBox(
                     height: 10.0,
                   ),
@@ -35,7 +36,7 @@ class Start extends StatelessWidget {
                     width: MediaQuery.of(context).size.width - 40,
                     child: Center(
                       child: Text(
-                        'La innovación distingue a los líderes de los seguidores.',
+                        'Un minuto que pasa, es irrecuperable.',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 18, color: MyColors.white),
                       ),
@@ -46,8 +47,7 @@ class Start extends StatelessWidget {
                       widthFactor: 0.3,
                       heightFactor: 0.3,
                       child: Container(
-                        child:
-                            Image(image: AssetImage("assets/images/campana.png")),
+                        child: Image(image: AssetImage("assets/images/g0.png")),
                       ),
                     ),
                   )

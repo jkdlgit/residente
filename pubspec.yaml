@@ -66,6 +66,11 @@ flutter:
       - assets/images/directo.png
       - assets/images/reloj.png
       - assets/images/nowifi.png
+      - assets/images/g0.png
+      - assets/images/p1.png
+      - assets/images/g1.png
+      - assets/images/gh1.png
+      - assets/images/gh2.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

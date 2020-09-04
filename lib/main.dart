@@ -64,7 +64,7 @@ class MainHome extends StatelessWidget {
           widthFactor: 0.3,
           heightFactor: 0.3,
           child: Container(
-            child: Image(image: AssetImage("assets/images/campana.png")),
+            child: Image(image: AssetImage("assets/images/g0.png")),
           ),
         ),
       ),

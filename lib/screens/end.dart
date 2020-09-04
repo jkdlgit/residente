@@ -56,7 +56,7 @@ class _EndState extends State<End> {
               animationDuration: 10000,
               percent: 1.0,
               linearStrokeCap: LinearStrokeCap.roundAll,
-              progressColor: MyColors.tory_blue),
+              progressColor: MyColors.moccasin),
         ),
         Padding(
           padding: EdgeInsets.all(10.0),
@@ -91,7 +91,7 @@ class _EndState extends State<End> {
                   style: TextStyle(
                       fontSize: 50,
                       fontWeight: FontWeight.bold,
-                      color: MyColors.moccasin),
+                      color: MyColors.white),
                 ),
                 Text(
                   'Comparte este código  ',
@@ -242,7 +242,7 @@ class _EndState extends State<End> {
     return Alert(
       style: alertStyle,
       context: context,
-      type: AlertType.success,
+      //type: AlertType.success,
       title: (estadoEnvio) ? "ALERTA ENVIADA" : "ALERTNA NO ENVIADA",
       buttons: [
         DialogButton(
