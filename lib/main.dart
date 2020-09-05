@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:residente/screens/appBloqueada.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/screens/noConnection.dart';
 import 'package:residente/screens/start.dart';
@@ -31,22 +32,38 @@ class MyApp extends StatelessWidget {
 
 class MainHome extends StatelessWidget {
   _testConnection(context) async {
-    var hasConnection = await DataConnectionChecker().hasConnection;
-
-    _gestionarEstadoVersion();
-    print('>>>>>>>>>>>>>>>>>>>>>> A LA ESPERA DE FINALIZACION');
-
-    if (hasConnection) {
-      bool ret = await _versionEstaActiva();
-      if (ret) {
-        _getStart(context);
-      } else {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => VersionInactiva()));
+    var ret_bloq;
+    try {
+      //localDb.save(Campos.app_bloqueada, null);
+      ret_bloq = await localDb.read(Campos.app_bloqueada);
+      if (ret_bloq.toString().toLowerCase() == 'true') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AppBloqueada()),
+        );
       }
-    } else {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => NoConnection()));
+    } catch (ex) {}
+    if (ret_bloq == null) {
+      ret_bloq = false;
+    }
+    if (ret_bloq.toString().toLowerCase() != 'true') {
+      var hasConnection = await DataConnectionChecker().hasConnection;
+
+      _gestionarEstadoVersion();
+      print('>>>>>>>>>>>>>>>>>>>>>> A LA ESPERA DE FINALIZACION');
+
+      if (hasConnection) {
+        bool ret = await _versionEstaActiva();
+        if (ret) {
+          _getStart(context);
+        } else {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => VersionInactiva()));
+        }
+      } else {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => NoConnection()));
+      }
     }
   }
 
