@@ -37,6 +37,8 @@ class Campos {
   static String document_id = 'document_id';
   static String estado_version = 'estado_version';
   static String app_bloqueada = 'app_bloqueada';
+  static String detalle = 'detalle';
+  static String fecha = 'fecha';
 }
 
 class Coleccion {

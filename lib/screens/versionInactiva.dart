@@ -23,7 +23,7 @@ class VersionInactiva extends StatelessWidget {
                 width: MediaQuery.of(context).size.width - 40,
                 child: Center(
                   child: Text(
-                    'Esta versión no esta disponible, por favor actualiza Alert para seguir usándola.',
+                    'Esta versión no esta disponible, por favor actualiza alert para seguir usándola.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 18, color: MyColors.white),
                   ),

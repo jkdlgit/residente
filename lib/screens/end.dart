@@ -270,6 +270,7 @@ class _EndState extends State<End> {
             } else {
               //GUARDA UNA BANDERA DE BLOQUEO EN LA APP
               localDb.save(Campos.app_bloqueada, 'true');
+              _guardarBloqueoCloudStore();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AppBloqueada()),
@@ -288,5 +289,19 @@ class _EndState extends State<End> {
         )
       ],
     ).show();
+  }
+
+  _guardarBloqueoCloudStore() async {
+    try {
+      DocumentReference ref = await db
+          .collection('log')
+          .document('residente')
+          .collection('bloqueo')
+          .add({
+        Campos.documentId: global.residente.documentId,
+        Campos.detalle: 'MAL USO',
+        Campos.fecha: DateTime.now(),
+      });
+    } catch (ex) {}
   }
 }
