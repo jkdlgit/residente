@@ -15,7 +15,7 @@ description: A new Flutter project.
 
 # EXPLICACION DE COMO CAMBIAR LA VERSION
 # https://www.it-swarm-es.tech/es/android/flutter-actualiza-el-codigo-de-version-para-play-store/808328735/
-version: 1.0.0+8
+version: 1.0.0+9
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
