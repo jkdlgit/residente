@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
@@ -149,6 +150,10 @@ class _Register1State extends State<Register2> {
                       ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: myControllerNombre,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
+                      ],
+                      keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: MyColors.white,
@@ -186,6 +191,10 @@ class _Register1State extends State<Register2> {
                       ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: myControllerFamilia,
+                      keyboardType: TextInputType.name,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
+                      ],
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: MyColors.white,
