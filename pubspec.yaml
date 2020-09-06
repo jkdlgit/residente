@@ -36,11 +36,17 @@ dependencies:
   flushbar: ^1.9.1
   data_connection_checker: ^0.3.4
   permission_handler: ^4.4.0+hotfix.2
+  flutter_launcher_icons: "^0.7.3"
 
   
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 
 # For information on the generic Dart part of this file, see the
@@ -66,6 +72,11 @@ flutter:
       - assets/images/directo.png
       - assets/images/reloj.png
       - assets/images/nowifi.png
+      - assets/images/g0.png
+      - assets/images/p1.png
+      - assets/images/g1.png
+      - assets/images/gh1.png
+      - assets/images/gh2.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

@@ -87,24 +87,26 @@ class _Register1State extends State<Register1> {
                     )
                   ],
                 ),
+                SizedBox(
+                  height: 40.0,
+                ),
                 FractionallySizedBox(
                   widthFactor: 0.3,
                   child: Container(
-                    child:
-                        Image(image: AssetImage("assets/images/campana2.png")),
+                    child: Image(image: AssetImage("assets/images/gh2.png")),
                   ),
                 ),
                 SizedBox(
                   height: 10.0,
                 ),
-                Text(
+                /*Text(
                   global.appName,
                   style: TextStyle(
                     color: MyColors.sapphire,
                     fontSize: TamanioTexto.logo,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
+                ),*/
                 SizedBox(
                   height: 45.0,
                 ),

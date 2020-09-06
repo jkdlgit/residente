@@ -59,7 +59,7 @@ class HomeState extends State<Home> {
           title: Text(
             global.residente.nombre + ' ' + global.residente.familia,
             //'Darwin Cabezas',
-            style: TextStyle(color: MyColors.moccasin),
+            style: TextStyle(color: MyColors.white),
           ),
           automaticallyImplyLeading: false,
           backgroundColor: MyColors.sapphire,
@@ -83,24 +83,24 @@ class HomeState extends State<Home> {
         child: Column(
           children: [
             SizedBox(
-              height: 20.0,
+              height: 0.0,
             ),
             FractionallySizedBox(
               widthFactor: 0.3,
               child: Center(
                 child: Container(
                   child: Image(
-                    image: AssetImage("assets/images/campana.png"),
-                    width: 65,
+                    image: AssetImage("assets/images/g0.png"),
+                    width: 150,
                   ),
                 ),
               ),
             ),
             SizedBox(
-              height: 5.0,
+              height: 0.0,
             ),
             Text(
-              'Alert Now',
+              '',
               style: TextStyle(
                   color: MyColors.white,
                   fontSize: TamanioTexto.subtitulo,

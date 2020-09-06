@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:residente/models/residente.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
-class VersionInactiva extends StatelessWidget {
+import 'package:residente/models/residente.dart';
+import 'package:residente/screens/register1.dart';
+
+class AppBloqueada extends StatefulWidget {
+  @override
+  _AppBloqueadaState createState() => _AppBloqueadaState();
+}
+
+class _AppBloqueadaState extends State<AppBloqueada> {
+  bool hasConnection = false;
+  ProgressDialog pr;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -11,23 +22,25 @@ class VersionInactiva extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: MyColors.sapphire,
+          backgroundColor: MyColors.white,
           elevation: 0.0,
           automaticallyImplyLeading: false,
         ),
         body: Column(
           children: <Widget>[
             Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width - 40,
-                child: Center(
-                  child: Text(
-                    'Esta versión no esta disponible, por favor actualiza alert para seguir usándola.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, color: MyColors.white),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width - 50,
+                    child: Text(
+                      'Al parecer has hecho uso incorrecto de alert, si crees que esto ha sido un error, por favor contáctate con nosotros.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 22, color: MyColors.grey60),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
             Center(
@@ -35,14 +48,13 @@ class VersionInactiva extends StatelessWidget {
                 width: Posiciones.getBottomButtonSize(context),
                 height: 50.0,
                 child: FlatButton(
-                  color: MyColors.white,
+                  color: MyColors.sapphire,
                   onPressed: () {
                     SystemNavigator.pop();
                   },
                   child: Text(
-                    'SALIR',
-                    style:
-                        TextStyle(letterSpacing: 1.5, color: MyColors.sapphire),
+                    'ACEPTAR',
+                    style: TextStyle(letterSpacing: 1.5, color: MyColors.white),
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(22.0),
@@ -54,7 +66,7 @@ class VersionInactiva extends StatelessWidget {
             SizedBox(height: Posiciones.separacion_inferior_boton)
           ],
         ),
-        backgroundColor: MyColors.sapphire,
+        backgroundColor: MyColors.white,
       ),
     );
   }
