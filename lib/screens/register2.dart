@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
@@ -40,172 +41,224 @@ class _Register1State extends State<Register2> {
       direction: Axis.vertical,
       children: <Widget>[
         Expanded(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  FractionallySizedBox(
-                    widthFactor: 0.3,
-                    child: Container(
-                      child: Image(
-                          image: AssetImage("assets/images/campana2.png")),
+          // child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      child: Container(
+                        width: 50.0,
+                        height: 60.0,
+                        child: SizedBox(
+                          width: 20.0,
+                        ),
+                      ),
                     ),
-                  ),
+                    Container(
+                      height: 35.0,
+                      child:
+                          Image(image: AssetImage("assets/images/reloj.png")),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                      child: Container(
+                        width: 50.0,
+                        height: 15.0,
+                        child: SizedBox(
+                          width: 20.0,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 25.0,
+                      child:
+                          Image(image: AssetImage("assets/images/directo.png")),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 40.0,
+                ),
 
-                  SizedBox(
-                    height: 10.0,
+                FractionallySizedBox(
+                  widthFactor: 0.3,
+                  child: Container(
+                    child: Image(image: AssetImage("assets/images/gh2.png")),
                   ),
-                  Text(
+                ),
+
+                SizedBox(
+                  height: 10.0,
+                ),
+                /*Text(
                     global.appName,
                     style: TextStyle(
                       color: MyColors.sapphire,
                       fontSize: TamanioTexto.logo,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),*/
+
+                SizedBox(height: 40.0),
+
+                Text(
+                  'Ya casi terminamos..',
+                  style: TextStyle(
+                      fontSize: TamanioTexto.titulo,
+                      color: MyColors.grey30,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 40,
+                    child: Center(
+                      child: Text(
+                        'Por favor, completa los siguientes datos',
+                        style: TextStyle(
+                          fontSize: TamanioTexto.subtitulo,
+                          color: MyColors.grey60,
+                        ),
+                      ),
+                    ),
                   ),
+                ),
 
-                  SizedBox(height: 25.0),
+                SizedBox(height: 40.0),
 
-                  Text(
-                    'Ya casi terminamos..',
-                    style: TextStyle(
-                        fontSize: TamanioTexto.titulo,
+                //NOMBRE
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 40,
+                    child: TextField(
+                      style: TextStyle(
+                        fontSize: TamanioTexto.subtitulo,
                         color: MyColors.grey30,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-
-                  Center(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width - 40,
-                      child: Center(
-                        child: Text(
-                          'Por favor, completa los siguientes datos',
-                          style: TextStyle(
-                            fontSize: TamanioTexto.subtitulo,
-                            color: MyColors.grey60,
-                          ),
-                        ),
                       ),
+                      textAlignVertical: TextAlignVertical.center,
+                      controller: myControllerNombre,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
+                      ],
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: MyColors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                          borderSide:
+                              BorderSide(width: 1, color: MyColors.sapphire),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                          borderSide:
+                              BorderSide(width: 1, color: MyColors.grey60),
+                        ),
+                        hintText: 'Nombre',
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-
-                  SizedBox(height: 40.0),
-
-                  //NOMBRE
-                  Center(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width - 40,
-                      child: TextField(
-                        style: TextStyle(
-                          fontSize: TamanioTexto.subtitulo,
-                          color: MyColors.grey30,
-                        ),
-                        textAlignVertical: TextAlignVertical.center,
-                        controller: myControllerNombre,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12),
-                            ),
-                            borderSide:
-                                BorderSide(width: 1, color: MyColors.sapphire),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12),
-                            ),
-                            borderSide:
-                                BorderSide(width: 1, color: MyColors.grey60),
-                          ),
-                          hintText: 'Nombre',
-                        ),
-                        textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                //FAMILIA
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 40,
+                    child: TextField(
+                      style: TextStyle(
+                        fontSize: TamanioTexto.subtitulo,
+                        color: MyColors.grey30,
                       ),
+                      textAlignVertical: TextAlignVertical.center,
+                      controller: myControllerFamilia,
+                      keyboardType: TextInputType.name,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
+                      ],
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: MyColors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                          borderSide:
+                              BorderSide(width: 1, color: MyColors.sapphire),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                          borderSide:
+                              BorderSide(width: 1, color: MyColors.grey60),
+                        ),
+                        hintText: 'Familia',
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  //FAMILIA
-                  Center(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width - 40,
-                      child: TextField(
-                        style: TextStyle(
-                          fontSize: TamanioTexto.subtitulo,
-                          color: MyColors.grey30,
-                        ),
-                        textAlignVertical: TextAlignVertical.center,
-                        controller: myControllerFamilia,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12),
-                            ),
-                            borderSide:
-                                BorderSide(width: 1, color: MyColors.sapphire),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12),
-                            ),
-                            borderSide:
-                                BorderSide(width: 1, color: MyColors.grey60),
-                          ),
-                          hintText: 'Familia',
-                        ),
-                        textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                //DIRECCION
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 40,
+                    child: TextField(
+                      style: TextStyle(
+                        fontSize: TamanioTexto.subtitulo,
+                        color: MyColors.grey30,
                       ),
+                      textAlignVertical: TextAlignVertical.center,
+                      controller: myControllerDireccion,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: MyColors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                          borderSide:
+                              BorderSide(width: 1, color: MyColors.sapphire),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                          borderSide:
+                              BorderSide(width: 1, color: MyColors.grey60),
+                        ),
+                        hintText: 'Dirección',
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  //DIRECCION
-                  Center(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width - 40,
-                      child: TextField(
-                        style: TextStyle(
-                          fontSize: TamanioTexto.subtitulo,
-                          color: MyColors.grey30,
-                        ),
-                        textAlignVertical: TextAlignVertical.center,
-                        controller: myControllerDireccion,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12),
-                            ),
-                            borderSide:
-                                BorderSide(width: 1, color: MyColors.sapphire),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12),
-                            ),
-                            borderSide:
-                                BorderSide(width: 1, color: MyColors.grey60),
-                          ),
-                          hintText: 'Dirección',
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+          // ),
         ),
         Align(
           alignment: Alignment.bottomCenter,

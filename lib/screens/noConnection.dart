@@ -33,7 +33,7 @@ class _NoConnectionState extends State<NoConnection> {
               child: Column(
                 children: <Widget>[
                   Text(
-                    'Alert',
+                    'alert',
                     style: TextStyle(
                       color: MyColors.grey30,
                       fontSize: 22.0,

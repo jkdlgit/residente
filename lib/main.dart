@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:residente/screens/appBloqueada.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/screens/noConnection.dart';
 import 'package:residente/screens/start.dart';
@@ -31,21 +32,37 @@ class MyApp extends StatelessWidget {
 
 class MainHome extends StatelessWidget {
   _testConnection(context) async {
-    var hasConnection = await DataConnectionChecker().hasConnection;
+    var ret_bloq;
+    try {
+      //localDb.save(Campos.app_bloqueada, null);
+      ret_bloq = await localDb.read(Campos.app_bloqueada);
+      if (ret_bloq.toString().toLowerCase() == 'true') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AppBloqueada()),
+        );
+      }
+    } catch (ex) {}
+    if (ret_bloq == null) {
+      ret_bloq = false;
+    }
+    if (ret_bloq.toString().toLowerCase() != 'true') {
+      var hasConnection = await DataConnectionChecker().hasConnection;
 
     _gestionarEstadoVersion();
 
-    if (hasConnection) {
-      bool ret = await _versionEstaActiva();
-      if (ret) {
-        _getStart(context);
+      if (hasConnection) {
+        bool ret = await _versionEstaActiva();
+        if (ret) {
+          _getStart(context);
+        } else {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => VersionInactiva()));
+        }
       } else {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => VersionInactiva()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => NoConnection()));
       }
-    } else {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => NoConnection()));
     }
   }
 
@@ -62,7 +79,7 @@ class MainHome extends StatelessWidget {
           widthFactor: 0.3,
           heightFactor: 0.3,
           child: Container(
-            child: Image(image: AssetImage("assets/images/campana.png")),
+            child: Image(image: AssetImage("assets/images/g0.png")),
           ),
         ),
       ),
