@@ -94,7 +94,7 @@ class ExplicacionState extends State<Explicacion> {
                 ),
               ))
         ],
-        shape: ShapeLightFocus.Circle,
+        shape: ShapeLightFocus.RRect,
         radius: 5,
       ),
     );
@@ -292,6 +292,7 @@ class ExplicacionState extends State<Explicacion> {
           width: MediaQuery.of(context).size.width,
           child: Center(
             child: Container(
+              key: keyTiempo1,
               height: 120.0,
               child: ListView.builder(
                 padding: EdgeInsets.only(left: 10.0, top: 0.0),
@@ -325,7 +326,6 @@ class ExplicacionState extends State<Explicacion> {
                 });
               },
               child: Container(
-                key: keyTiempo1,
                 child: CircleAvatar(
                   radius: 45.0,
                   backgroundColor: MyColors.moccasin,

@@ -40,6 +40,7 @@ class Campos {
   static String detalle = 'detalle';
   static String fecha = 'fecha';
   static String tutorial_realizado = 'tutorial_realizado';
+  static String estado = 'estado';
 }
 
 class Coleccion {

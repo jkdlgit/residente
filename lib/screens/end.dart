@@ -212,6 +212,7 @@ class _EndState extends State<End> {
           Campos.familia: global.residente.familia,
           Campos.duracion: global.usAlerta.duracion,
           Campos.documentId: global.residente.documentId,
+          Campos.estado: '0'
         },
       );
 
@@ -226,6 +227,7 @@ class _EndState extends State<End> {
           Campos.direccion: global.residente.direccion,
           Campos.familia: global.residente.familia,
           Campos.duracion: global.usAlerta.duracion,
+          Campos.estado: '0'
         },
       );
     } else {

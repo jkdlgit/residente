@@ -272,8 +272,8 @@ class _Register1State extends State<Register2> {
                 child: FlatButton(
                   color: MyColors.sapphire,
                   onPressed: () {
-                    _continuar(context);
-                    //_registryVerification(context);
+                    //_continuar(context);
+                    _registryVerification(context);
                   },
                   child: Text(
                     'FINALIZAR',
@@ -419,7 +419,7 @@ class _Register1State extends State<Register2> {
       style: alertStyle,
       context: context,
       //type: AlertType.success,
-      title: "Aprendamos a usar alert, para emitir alertas",
+      title: "Listo! ahora aprendamos a usar alert, para emitir alertas",
       buttons: [
         DialogButton(
           child: Text(
