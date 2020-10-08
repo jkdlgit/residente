@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
+import 'package:residente/screens/explicacion.dart';
 import 'package:residente/screens/home.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/utils/methos.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Register2 extends StatefulWidget {
   @override
@@ -270,7 +272,8 @@ class _Register1State extends State<Register2> {
                 child: FlatButton(
                   color: MyColors.sapphire,
                   onPressed: () {
-                    _registryVerification(context);
+                    _continuar(context);
+                    //_registryVerification(context);
                   },
                   child: Text(
                     'FINALIZAR',
@@ -387,9 +390,51 @@ class _Register1State extends State<Register2> {
   }
 
   _continuar(context) {
-    Navigator.push(
+    _mostrarPopUp(context);
+    /*Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Home()),
+      //MaterialPageRoute(builder: (context) => Home()),
+      MaterialPageRoute(builder: (context) => Explicacion()),
+    );*/
+  }
+
+  _mostrarPopUp(context) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.grow,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: MyColors.sapphire,
+      ),
     );
+    return Alert(
+      style: alertStyle,
+      context: context,
+      //type: AlertType.success,
+      title: "Aprendamos a usar alert, para emitir alertas",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Empezar",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Explicacion()),
+            );
+          },
+          color: MyColors.sapphire,
+        ),
+      ],
+    ).show();
   }
 }

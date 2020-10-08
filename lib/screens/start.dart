@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:residente/models/residente.dart';
-import 'package:residente/screens/advertenciaTest.dart';
+import 'package:residente/screens/explicacion.dart';
 
 import 'package:residente/screens/register1.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Start extends StatelessWidget {
   @override
@@ -64,8 +65,7 @@ class Start extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => AdvertenciaTest()),
+                      MaterialPageRoute(builder: (context) => Register1()),
                     );
                   },
                   child: Text(

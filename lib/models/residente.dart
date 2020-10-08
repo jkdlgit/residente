@@ -39,6 +39,7 @@ class Campos {
   static String app_bloqueada = 'app_bloqueada';
   static String detalle = 'detalle';
   static String fecha = 'fecha';
+  static String tutorial_realizado = 'tutorial_realizado';
 }
 
 class Coleccion {

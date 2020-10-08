@@ -32,6 +32,12 @@ class MyApp extends StatelessWidget {
 
 class MainHome extends StatelessWidget {
   _testConnection(context) async {
+    Methods.guardarLogCloudStore('main', '_getStart', 'ex.toString()');
+    Methods.guardarLogCloudStore('main', '_getStart', 'ex.toString()');
+    Methods.guardarLogCloudStore('main', '_getStart', 'ex.toString()');
+    Methods.guardarLogCloudStore('main', '_getStart', 'ex.toString()');
+    Methods.guardarLogCloudStore('main', '_getStart', 'ex.toString()');
+
     var ret_bloq;
     try {
       //localDb.save(Campos.app_bloqueada, null);
@@ -49,7 +55,7 @@ class MainHome extends StatelessWidget {
     if (ret_bloq.toString().toLowerCase() != 'true') {
       var hasConnection = await DataConnectionChecker().hasConnection;
 
-    _gestionarEstadoVersion();
+      _gestionarEstadoVersion();
 
       if (hasConnection) {
         bool ret = await _versionEstaActiva();
