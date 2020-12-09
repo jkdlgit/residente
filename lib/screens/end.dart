@@ -20,10 +20,11 @@ final localDb = LocalDataBase();
 final db = Firestore.instance;
 bool alertaEnviada = false;
 bool datosEnvioCorrectos = false;
+int val_timer = 20;
 
 class _EndState extends State<End> {
   Timer _timer;
-  int _start = 10;
+  int _start = val_timer;
   @override
   void initState() {
     super.initState();
@@ -56,7 +57,7 @@ class _EndState extends State<End> {
           child: new LinearPercentIndicator(
               animation: true,
               lineHeight: 4.0,
-              animationDuration: 10000,
+              animationDuration: val_timer * 1000,
               percent: 1.0,
               linearStrokeCap: LinearStrokeCap.roundAll,
               progressColor: MyColors.moccasin),

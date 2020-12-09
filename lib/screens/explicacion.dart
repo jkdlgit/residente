@@ -28,6 +28,7 @@ class ExplicacionState extends State<Explicacion> {
 
   List<TargetFocus> targets = List();
 
+  GlobalKey keyTiempo0 = GlobalKey();
   GlobalKey keyTiempo1 = GlobalKey();
   GlobalKey keyTipoVisita1 = GlobalKey();
 
@@ -67,6 +68,55 @@ class ExplicacionState extends State<Explicacion> {
     targets.add(
       TargetFocus(
         identify: "Target 0",
+        keyTarget: keyTiempo0,
+        contents: [
+          ContentTarget(
+              align: AlignContent.bottom,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Tutorial",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 30.0),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        "Ahora voy a explicarte como usar alert.",
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Container(
+                        width: 120,
+                        child: FlatButton(
+                          color: Colors.white,
+                          child: Text(
+                            'Iniciar',
+                            style: TextStyle(color: Colors.black, fontSize: 20),
+                          ),
+                          onPressed: () {
+                            tutorialCoachMark.next();
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ))
+        ],
+        shape: ShapeLightFocus.RRect,
+      ),
+    );
+    targets.add(
+      TargetFocus(
+        identify: "Target 1",
         keyTarget: keyTiempo1,
         contents: [
           ContentTarget(
@@ -94,13 +144,13 @@ class ExplicacionState extends State<Explicacion> {
                 ),
               ))
         ],
-        shape: ShapeLightFocus.RRect,
+        shape: ShapeLightFocus.Circle,
         radius: 5,
       ),
     );
     targets.add(
       TargetFocus(
-        identify: "Target 1",
+        identify: "Target 2",
         keyTarget: keyTipoVisita1,
         color: Colors.black,
         contents: [
@@ -162,6 +212,9 @@ class ExplicacionState extends State<Explicacion> {
     return Flex(
       direction: Axis.vertical,
       children: <Widget>[
+        Container(
+          key: keyTiempo0,
+        ),
         _cardSuperior(),
         Container(
           child: SingleChildScrollView(
@@ -292,7 +345,6 @@ class ExplicacionState extends State<Explicacion> {
           width: MediaQuery.of(context).size.width,
           child: Center(
             child: Container(
-              key: keyTiempo1,
               height: 120.0,
               child: ListView.builder(
                 padding: EdgeInsets.only(left: 10.0, top: 0.0),
@@ -326,6 +378,7 @@ class ExplicacionState extends State<Explicacion> {
                 });
               },
               child: Container(
+                key: keyTiempo1,
                 child: CircleAvatar(
                   radius: 45.0,
                   backgroundColor: MyColors.moccasin,
@@ -434,6 +487,7 @@ class _ExpEndState extends State<ExpEnd> {
 
   List<TargetFocus> targets = List();
 
+  GlobalKey keyInicial = GlobalKey();
   GlobalKey keyLinear = GlobalKey();
   GlobalKey keyTipoVisita1 = GlobalKey();
   GlobalKey keyCodigo = GlobalKey();
@@ -473,6 +527,56 @@ class _ExpEndState extends State<ExpEnd> {
     targets.add(
       TargetFocus(
         identify: "Target 0",
+        keyTarget: keyInicial,
+        color: Colors.black,
+        contents: [
+          ContentTarget(
+              align: AlignContent.bottom,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 30.0),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        "Ya falta poco, para enviar tu alerta, este paso es muy importante.",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Container(
+                        width: 120,
+                        child: FlatButton(
+                          color: Colors.white,
+                          child: Text(
+                            'Continuar',
+                            style: TextStyle(color: Colors.black, fontSize: 20),
+                          ),
+                          onPressed: () {
+                            tutorialCoachMark.next();
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ))
+        ],
+        shape: ShapeLightFocus.RRect,
+      ),
+    );
+    targets.add(
+      TargetFocus(
+        identify: "Target 1",
         keyTarget: keyLinear,
         color: Colors.black,
         contents: [
@@ -523,7 +627,7 @@ class _ExpEndState extends State<ExpEnd> {
     );
     targets.add(
       TargetFocus(
-        identify: "Target 1",
+        identify: "Target 2",
         keyTarget: keyCodigo,
         color: Colors.black,
         contents: [
@@ -574,7 +678,7 @@ class _ExpEndState extends State<ExpEnd> {
     );
     targets.add(
       TargetFocus(
-        identify: "Target 2",
+        identify: "Target 3",
         keyTarget: keyEnviarAlerta,
         color: Colors.black,
         contents: [
@@ -633,6 +737,9 @@ class _ExpEndState extends State<ExpEnd> {
           key: keyLinear,
           child: Column(
             children: [
+              Container(
+                key: keyInicial,
+              ),
               SizedBox(
                 height: 20.0,
               ),
@@ -643,7 +750,7 @@ class _ExpEndState extends State<ExpEnd> {
                     child: LinearPercentIndicator(
                         animation: true,
                         lineHeight: 4.0,
-                        animationDuration: 10000,
+                        animationDuration: 20000,
                         percent: 1.0,
                         linearStrokeCap: LinearStrokeCap.roundAll,
                         progressColor: MyColors.moccasin),
