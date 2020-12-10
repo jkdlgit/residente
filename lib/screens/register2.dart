@@ -5,7 +5,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
 import 'package:residente/screens/explicacion.dart';
-import 'package:residente/screens/home.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/utils/methos.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -43,7 +42,6 @@ class _Register1State extends State<Register2> {
       direction: Axis.vertical,
       children: <Widget>[
         Expanded(
-          // child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -102,14 +100,6 @@ class _Register1State extends State<Register2> {
                 SizedBox(
                   height: 10.0,
                 ),
-                /*Text(
-                    global.appName,
-                    style: TextStyle(
-                      color: MyColors.sapphire,
-                      fontSize: TamanioTexto.logo,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),*/
 
                 SizedBox(height: 40.0),
 
@@ -272,7 +262,6 @@ class _Register1State extends State<Register2> {
                 child: FlatButton(
                   color: MyColors.sapphire,
                   onPressed: () {
-                    //_continuar(context);
                     _registryVerification(context);
                   },
                   child: Text(
@@ -391,11 +380,6 @@ class _Register1State extends State<Register2> {
 
   _continuar(context) {
     _mostrarPopUp(context);
-    /*Navigator.push(
-      context,
-      //MaterialPageRoute(builder: (context) => Home()),
-      MaterialPageRoute(builder: (context) => Explicacion()),
-    );*/
   }
 
   _mostrarPopUp(context) {
@@ -418,8 +402,7 @@ class _Register1State extends State<Register2> {
     return Alert(
       style: alertStyle,
       context: context,
-      //type: AlertType.success,
-      title: "Listo! ahora aprendamos a usar alert, para emitir alertas",
+      title: "Listo! ahora aprendamos a usar alert para emitir alertas",
       buttons: [
         DialogButton(
           child: Text(

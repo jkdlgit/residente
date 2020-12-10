@@ -58,7 +58,6 @@ class HomeState extends State<Home> {
         appBar: AppBar(
           title: Text(
             global.residente.nombre + ' ' + global.residente.familia,
-            //'Darwin Cabezas',
             style: TextStyle(color: MyColors.white),
           ),
           automaticallyImplyLeading: false,
@@ -214,7 +213,7 @@ class HomeState extends State<Home> {
               Padding(
                 padding: EdgeInsets.all(4.0),
                 child: Text(
-                  'Tiempo de espera',
+                  'Minutos de espera',
                   style: TextStyle(
                       color: MyColors.white,
                       fontSize: TamanioTexto.subtitulo,
@@ -259,7 +258,7 @@ class HomeState extends State<Home> {
                   style: TextStyle(
                       fontSize: 40,
                       color: MyColors.sapphire,
-                      fontWeight: FontWeight.bold), //Colors.white),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             )
@@ -293,10 +292,9 @@ class HomeState extends State<Home> {
           if (garita != null) {
             String codigo = garita.data[Campos.generador_alerta];
 
-            //valida que no supere el valor limite de codigo
             try {
-              int temp_cod = int.parse(codigo);
-              if (temp_cod < global.valor_fin_defecto_generador_alerta) {
+              int tempCod = int.parse(codigo);
+              if (tempCod < global.valorFinDefectoGeneradorAlerta) {
                 _guardarDb(
                     Coleccion.registro_garita,
                     Campos.generador_alerta,
@@ -306,7 +304,7 @@ class HomeState extends State<Home> {
                 _guardarDb(
                     Coleccion.registro_garita,
                     Campos.generador_alerta,
-                    global.valor_inicio_defecto_generador_alerta,
+                    global.valorInicioDefectoGeneradorAlerta,
                     global.residente.documentIdGarita);
               }
               _setAlertData(codigo, null, times[indexSelected]);
@@ -316,7 +314,7 @@ class HomeState extends State<Home> {
               _guardarDb(
                   Coleccion.registro_garita,
                   Campos.generador_alerta,
-                  global.valor_inicio_defecto_generador_alerta,
+                  global.valorInicioDefectoGeneradorAlerta,
                   global.residente.documentIdGarita);
               Methods.guardarLogCloudStore(
                   'home', '_getAlertCode', ex.toString());
@@ -328,35 +326,9 @@ class HomeState extends State<Home> {
             _guardarDb(
                 Coleccion.registro_garita,
                 Campos.generador_alerta,
-                global.valor_inicio_defecto_generador_alerta,
+                global.valorInicioDefectoGeneradorAlerta,
                 global.residente.documentIdGarita);
 
-            _mostrarPopUp();
-          }
-        },
-      );
-    }
-  }
-
-  _getAlertCode1() {
-    if (global.usAlerta.codigo == null) {
-      DocumentReference userQuery = db
-          .collection(Coleccion.registro_garita)
-          .document(global.residente.documentIdGarita);
-
-      userQuery.get().then(
-        (garita) {
-          if (garita != null) {
-            String codigo = garita.data[Campos.generador_alerta];
-
-            _guardarDb(
-                Coleccion.registro_garita,
-                Campos.generador_alerta,
-                (int.parse(codigo) + 1).toString(),
-                global.residente.documentIdGarita);
-
-            _setAlertData(codigo, null, times[indexSelected]);
-          } else {
             _mostrarPopUp();
           }
         },

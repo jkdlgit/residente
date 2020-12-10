@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:residente/models/residente.dart';
-import 'package:residente/screens/explicacion.dart';
-
 import 'package:residente/screens/register1.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Start extends StatelessWidget {
   @override
@@ -23,13 +20,6 @@ class Start extends StatelessWidget {
             Expanded(
               child: Column(
                 children: <Widget>[
-                  /*Text(
-                    'Alert Now',
-                    style: TextStyle(
-                      color: MyColors.moccasin,
-                      fontSize: 22.0,
-                    ),
-                  ),*/
                   SizedBox(
                     height: 10.0,
                   ),

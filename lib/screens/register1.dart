@@ -99,14 +99,6 @@ class _Register1State extends State<Register1> {
                 SizedBox(
                   height: 10.0,
                 ),
-                /*Text(
-                  global.appName,
-                  style: TextStyle(
-                    color: MyColors.sapphire,
-                    fontSize: TamanioTexto.logo,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),*/
                 SizedBox(
                   height: 45.0,
                 ),

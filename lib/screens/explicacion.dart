@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:residente/models/residente.dart';
 import 'package:residente/models/times.dart';
-import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/types.dart';
 import 'package:residente/screens/end.dart';
 import 'package:residente/screens/home.dart';
@@ -13,8 +12,8 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:tutorial_coach_mark/animated_focus_light.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-String codigo_ejemplo = '1234';
-String tipo_visita_ejemplo = 'Amigos';
+String codigoEjemplo = '1234';
+String tipoVisitaEjemplo = 'Amigos';
 
 class Explicacion extends StatefulWidget {
   final String title = "Alerta";
@@ -43,7 +42,7 @@ class ExplicacionState extends State<Explicacion> {
     tutorialCoachMark = TutorialCoachMark(context,
         targets: targets,
         colorShadow: Colors.black,
-        textSkip: "SALTAR TUTORIAL",
+        textSkip: "",
         paddingFocus: 10,
         opacityShadow: 0.8, onFinish: () {
       Navigator.push(
@@ -51,9 +50,9 @@ class ExplicacionState extends State<Explicacion> {
         MaterialPageRoute(builder: (context) => ExpEnd()),
       );
     }, onClickTarget: (target) {
-      print(target);
+      //print(target);
     }, onClickSkip: () {
-      print("skip");
+      //print("skip");
     })
       ..show();
   }
@@ -195,7 +194,6 @@ class ExplicacionState extends State<Explicacion> {
         appBar: AppBar(
           title: Text(
             'Tu Nombre De Ejemplo',
-            //'Darwin Cabezas',
             style: TextStyle(color: MyColors.white),
           ),
           automaticallyImplyLeading: false,
@@ -251,47 +249,6 @@ class ExplicacionState extends State<Explicacion> {
       ],
     );
   }
-
-  /*_inicio() {
-    return Container(
-        child: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 100.0),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              key: keyButton,
-              color: Colors.blue,
-              height: 100,
-              width: MediaQuery.of(context).size.width - 50,
-              child: Align(
-                alignment: Alignment.center,
-                child: RaisedButton(
-                  color: Colors.blueAccent,
-                  child: Icon(Icons.remove_red_eye),
-                  onPressed: () {
-                    showTutorial();
-                  },
-                ),
-              ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: SizedBox(
-            width: 50,
-            height: 50,
-            child: RaisedButton(
-              key: keyButton1,
-              onPressed: () {},
-            ),
-          ),
-        ),
-      ],
-    ));
-  }*/
 
   _cardSuperior() {
     return Container(
@@ -387,7 +344,7 @@ class ExplicacionState extends State<Explicacion> {
                     style: TextStyle(
                         fontSize: 40,
                         color: MyColors.sapphire,
-                        fontWeight: FontWeight.bold), //Colors.white),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -427,11 +384,7 @@ class ExplicacionState extends State<Explicacion> {
           }
           return GestureDetector(
             onTap: () {
-              //_setAlertData(null, type[index], null);
-              try {
-                //_next(context);
-
-              } catch (ex) {
+              try {} catch (ex) {
                 Methods.guardarLogCloudStore('home', '_cardInf', ex.toString());
               }
             },
@@ -475,8 +428,6 @@ class ExplicacionState extends State<Explicacion> {
   }
 }
 
-//******************************************** */
-
 class ExpEnd extends StatefulWidget {
   @override
   _ExpEndState createState() => _ExpEndState();
@@ -504,16 +455,12 @@ class _ExpEndState extends State<ExpEnd> {
     tutorialCoachMark = TutorialCoachMark(context,
         targets: targets,
         colorShadow: Colors.black,
-        textSkip: "SKIP",
+        textSkip: "",
         paddingFocus: 10,
         opacityShadow: 0.8, onFinish: () {
       localDb.save(Campos.tutorial_realizado, 'true');
       _mostrarPopUp(context);
-    }, onClickTarget: (target) {
-      print(target);
-    }, onClickSkip: () {
-      print("skip");
-    })
+    }, onClickTarget: (target) {}, onClickSkip: () {})
       ..show();
   }
 
@@ -692,7 +639,7 @@ class _ExpEndState extends State<ExpEnd> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Envia la alerta",
+                        "Envía la alerta",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -771,7 +718,7 @@ class _ExpEndState extends State<ExpEnd> {
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Envia la alerta antes que esta se cancele.',
+                      'Envía la alerta antes que esta se cancele.',
                       style: TextStyle(
                         color: Colors.grey[500],
                         fontSize: TamanioTexto.texto_pequenio,
@@ -794,7 +741,7 @@ class _ExpEndState extends State<ExpEnd> {
                 Container(
                   key: keyCodigo,
                   child: Text(
-                    codigo_ejemplo,
+                    codigoEjemplo,
                     style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
@@ -821,7 +768,7 @@ class _ExpEndState extends State<ExpEnd> {
                           color: Colors.grey[300]),
                     ),
                     Text(
-                      tipo_visita_ejemplo,
+                      tipoVisitaEjemplo,
                       style: TextStyle(
                           fontSize: TamanioTexto.subtitulo,
                           color: Colors.grey[300]),
@@ -885,7 +832,6 @@ class _ExpEndState extends State<ExpEnd> {
     return Alert(
       style: alertStyle,
       context: context,
-      //type: AlertType.success,
       title: "Genial! ahora sabes como usar alert, para emitir alertas.",
       buttons: [
         DialogButton(
