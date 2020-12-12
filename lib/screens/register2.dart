@@ -4,9 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
-import 'package:residente/screens/home.dart';
+import 'package:residente/screens/explicacion.dart';
 import 'package:residente/utils/localStorageDB.dart';
 import 'package:residente/utils/methos.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Register2 extends StatefulWidget {
   @override
@@ -41,7 +42,6 @@ class _Register1State extends State<Register2> {
       direction: Axis.vertical,
       children: <Widget>[
         Expanded(
-          // child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -100,14 +100,6 @@ class _Register1State extends State<Register2> {
                 SizedBox(
                   height: 10.0,
                 ),
-                /*Text(
-                    global.appName,
-                    style: TextStyle(
-                      color: MyColors.sapphire,
-                      fontSize: TamanioTexto.logo,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),*/
 
                 SizedBox(height: 40.0),
 
@@ -387,9 +379,45 @@ class _Register1State extends State<Register2> {
   }
 
   _continuar(context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Home()),
+    _mostrarPopUp(context);
+  }
+
+  _mostrarPopUp(context) {
+    var alertStyle = AlertStyle(
+      animationType: AnimationType.grow,
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      descStyle: TextStyle(fontWeight: FontWeight.bold),
+      animationDuration: Duration(milliseconds: 400),
+      alertBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        side: BorderSide(
+          color: Colors.grey,
+        ),
+      ),
+      titleStyle: TextStyle(
+        color: MyColors.sapphire,
+      ),
     );
+    return Alert(
+      style: alertStyle,
+      context: context,
+      title: "Listo! ahora aprendamos a usar alert para emitir alertas",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Empezar",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Explicacion()),
+            );
+          },
+          color: MyColors.sapphire,
+        ),
+      ],
+    ).show();
   }
 }

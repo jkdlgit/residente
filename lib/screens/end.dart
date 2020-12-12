@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:residente/library/variables_globales.dart' as global;
 import 'package:residente/models/residente.dart';
-import 'package:residente/screens/appBloqueada.dart';
 import 'dart:async';
 import 'package:residente/screens/home.dart';
 import 'package:residente/utils/localStorageDB.dart';
@@ -20,10 +19,11 @@ final localDb = LocalDataBase();
 final db = Firestore.instance;
 bool alertaEnviada = false;
 bool datosEnvioCorrectos = false;
+int valTimer = 20;
 
 class _EndState extends State<End> {
   Timer _timer;
-  int _start = 10;
+  int _start = valTimer;
   @override
   void initState() {
     super.initState();
@@ -56,7 +56,7 @@ class _EndState extends State<End> {
           child: new LinearPercentIndicator(
               animation: true,
               lineHeight: 4.0,
-              animationDuration: 10000,
+              animationDuration: valTimer * 1000,
               percent: 1.0,
               linearStrokeCap: LinearStrokeCap.roundAll,
               progressColor: MyColors.moccasin),
@@ -75,7 +75,7 @@ class _EndState extends State<End> {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                'Envia la alerta antes que esta se cancele.',
+                'Envía la alerta antes que esta se cancele.',
                 style: TextStyle(
                   color: Colors.grey[500],
                   fontSize: TamanioTexto.texto_pequenio,
@@ -139,14 +139,7 @@ class _EndState extends State<End> {
                   onPressed: () {
                     if (!alertaEnviada) {
                       (_timer != null) ? _timer.cancel() : SizedBox.shrink();
-
-                      if (global.contadorAlertaEnviadaBloqueo < 6) {
-                        global.contadorAlertaEnviadaBloqueo += 1;
-                        //print('CONTADOR BLOQUEO:  ' +
-                        //    global.contadorAlertaEnviadaBloqueo.toString());
-                        createData();
-                      }
-
+                      createData();
                       if (datosEnvioCorrectos) {
                         _mostrarPopUp(context, true);
                         alertaEnviada = true;
@@ -154,7 +147,6 @@ class _EndState extends State<End> {
                         _mostrarPopUp(context, false);
                         alertaEnviada = false;
                       }
-                      //global.contadorAlertaEnviadaBloqueo = 0;
                     } else {
                       null;
                     }
@@ -212,6 +204,7 @@ class _EndState extends State<End> {
           Campos.familia: global.residente.familia,
           Campos.duracion: global.usAlerta.duracion,
           Campos.documentId: global.residente.documentId,
+          Campos.estado: '0'
         },
       );
 
@@ -226,6 +219,7 @@ class _EndState extends State<End> {
           Campos.direccion: global.residente.direccion,
           Campos.familia: global.residente.familia,
           Campos.duracion: global.usAlerta.duracion,
+          Campos.estado: '0'
         },
       );
     } else {
@@ -253,7 +247,6 @@ class _EndState extends State<End> {
     return Alert(
       style: alertStyle,
       context: context,
-      //type: AlertType.success,
       title: (estadoEnvio) ? "ALERTA ENVIADA" : "ALERTNA NO ENVIADA",
       buttons: [
         DialogButton(
@@ -262,20 +255,10 @@ class _EndState extends State<End> {
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           onPressed: () {
-            if (global.contadorAlertaEnviadaBloqueo < 6) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Home()),
-              );
-            } else {
-              //GUARDA UNA BANDERA DE BLOQUEO EN LA APP
-              localDb.save(Campos.app_bloqueada, 'true');
-              _guardarBloqueoCloudStore();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AppBloqueada()),
-              );
-            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            );
           },
           color: (estadoEnvio) ? MyColors.sapphire : Colors.red,
         ),
@@ -289,19 +272,5 @@ class _EndState extends State<End> {
         )
       ],
     ).show();
-  }
-
-  _guardarBloqueoCloudStore() async {
-    try {
-      DocumentReference ref = await db
-          .collection('log')
-          .document('residente')
-          .collection('bloqueo')
-          .add({
-        Campos.documentId: global.residente.documentId,
-        Campos.detalle: 'MAL USO',
-        Campos.fecha: DateTime.now(),
-      });
-    } catch (ex) {}
   }
 }

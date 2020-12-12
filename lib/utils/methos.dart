@@ -67,8 +67,8 @@ class Methods {
 
   static guardarLogCloudStore(
       String _archivo, String _metodo, String _error) async {
-    var fecha_hora = new DateTime.now();
-    String trama = ('$fecha_hora|$_archivo|$_metodo|$_error');
+    var fechaHora = new DateTime.now();
+    String trama = ('$fechaHora|$_archivo|$_metodo|$_error');
     DocumentReference ref = await db
         .collection('log')
         .document('residente')

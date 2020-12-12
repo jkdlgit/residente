@@ -39,6 +39,8 @@ class Campos {
   static String app_bloqueada = 'app_bloqueada';
   static String detalle = 'detalle';
   static String fecha = 'fecha';
+  static String tutorial_realizado = 'tutorial_realizado';
+  static String estado = 'estado';
 }
 
 class Coleccion {
@@ -66,19 +68,6 @@ class UsAlerta {
       this.familia,
       this.direccion});
 }
-
-/*class MyColors {
-  static Color sapphire = Color(0xff0A1C66);
-  static Color white = Color(0xffFFFFFF);
-  static Color moccasin = Color(0xffFDE0B4);
-  static Color lavender_blue = Color(0xffC7DBFE);
-  static Color grey30 = Color(0xff595856);
-  static Color grey60 = Color(0xff9A9997);
-  static Color tory_blue = Color(0xff2B4292);
-  static Color white_grey = Color(0xffFEFEFE);
-  static Color white_grey_ligth = Color(0xffF9FAF5);
-  static Color white_ligth = Color(0xfff7f9fa);
-}*/
 
 class MyColors {
   static Color sapphire = Color(0xff005989);

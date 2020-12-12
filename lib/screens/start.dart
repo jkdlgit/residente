@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:residente/models/residente.dart';
-import 'package:residente/screens/advertenciaTest.dart';
-
 import 'package:residente/screens/register1.dart';
 
 class Start extends StatelessWidget {
@@ -22,13 +20,6 @@ class Start extends StatelessWidget {
             Expanded(
               child: Column(
                 children: <Widget>[
-                  /*Text(
-                    'Alert Now',
-                    style: TextStyle(
-                      color: MyColors.moccasin,
-                      fontSize: 22.0,
-                    ),
-                  ),*/
                   SizedBox(
                     height: 10.0,
                   ),
@@ -64,8 +55,7 @@ class Start extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => AdvertenciaTest()),
+                      MaterialPageRoute(builder: (context) => Register1()),
                     );
                   },
                   child: Text(

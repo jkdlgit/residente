@@ -15,7 +15,7 @@ description: A new Flutter project.
 
 # EXPLICACION DE COMO CAMBIAR LA VERSION
 # https://www.it-swarm-es.tech/es/android/flutter-actualiza-el-codigo-de-version-para-play-store/808328735/
-version: 1.0.0+9
+version: 1.0.0+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -36,7 +36,8 @@ dependencies:
   flushbar: ^1.9.1
   data_connection_checker: ^0.3.4
   permission_handler: ^4.4.0+hotfix.2
-  flutter_launcher_icons: "^0.7.3"
+  flutter_launcher_icons: ^0.8.1
+  tutorial_coach_mark: ^0.5.1
 
   
 dev_dependencies:
@@ -47,6 +48,8 @@ flutter_icons:
   android: true
   ios: true
   image_path: "assets/icon/icon.png"
+  
+
 
 
 # For information on the generic Dart part of this file, see the
